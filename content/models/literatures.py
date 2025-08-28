@@ -12,6 +12,7 @@ from ordered_model.models import OrderedModel
 
 from content.constants import IMAGE_CONTENT_TYPES, LITERATURE_CONTENT_TYPES
 from content.mixins import TitleMixin
+from content.utils import ckeditor_function, html_cleaner
 
 
 class Literature(TitleMixin, OrderedModel):
@@ -27,17 +28,18 @@ class Literature(TitleMixin, OrderedModel):
         verbose_name='Год издания',
     )
     cover = models.ImageField(
-        blank=True,
         verbose_name='Обложка',
         validators=[FileExtensionValidator(IMAGE_CONTENT_TYPES)],
     )
-    description = models.TextField(
-        blank=True, max_length=2000, verbose_name='Описание'
+    description = ckeditor_function(
+        verbose_name='Описание',
+        blank=True,
+        validators=[],
     )
     button_type = models.CharField(
+        blank=True,
         max_length=max(len(value) for value, _ in LinkChoises.choices),
         choices=LinkChoises.choices,
-        default=LinkChoises.FILE,
         verbose_name='Тип кнопки',
     )
     file = models.FileField(
@@ -59,6 +61,12 @@ class Literature(TitleMixin, OrderedModel):
     def __str__(self):
         """Возвращает строковое представление литературы."""
         return self.title
+
+    def save(self, *args, **kwargs):
+        """Сохранение с валидацией и очисткой пустых ckeditor полей."""
+        self.full_clean()
+        self.description = html_cleaner(self.description, '<p>&nbsp;</p>')
+        super().save(*args, **kwargs)
 
     def clean(self):
         """Валидация полей в зависимости от типа кнопки."""

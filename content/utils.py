@@ -33,5 +33,5 @@ def ckeditor_function(
 def html_cleaner(field, tags):
     """Используется для очистки ckeditor полей от дефолтных тегов."""
     if field == tags:
-        return None
+        return ''
     return field
