@@ -119,7 +119,7 @@ class AboutUsVideoSerializer(serializers.ModelSerializer):
 
         model = AboutUsVideo
         fields = [
-            'title',
+            'video_orientation',
             'url',
         ]
 
