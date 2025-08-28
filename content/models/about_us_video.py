@@ -7,18 +7,26 @@
 
 from django.db import models
 
-from content.constants import EMPTY_VALUE_DISPLAY, TITLE_LENGTH
+from content.constants import EMPTY_VALUE_DISPLAY
 from content.mixins import TimestampMixin
 
 
 class AboutUsVideo(TimestampMixin, models.Model):
     """Модель для хранения информации о видео в разделе 'О нас'."""
 
-    title = models.CharField(
-        verbose_name='Заголовок',
-        max_length=TITLE_LENGTH,
-        help_text='"Заголовок" не отображается на сайте.',
-        blank=True,
+    class VideoOrientationChoices(models.TextChoices):
+        """Выбор ориентации видео."""
+
+        HORIZONTAL = 'horizontal', 'Горизонтальная'
+        VERTICAL = 'vertical', 'Вертикальная'
+
+    video_orientation = models.CharField(
+        max_length=max(
+            len(value) for value, _ in VideoOrientationChoices.choices
+        ),
+        choices=VideoOrientationChoices.choices,
+        default=VideoOrientationChoices.HORIZONTAL,
+        verbose_name='Ориентация видео',
     )
     url = models.URLField('Ссылка на видео')
 
@@ -30,7 +38,7 @@ class AboutUsVideo(TimestampMixin, models.Model):
 
     def __str__(self):
         """Возвращает строковое представление объекта видео."""
-        return self.title or EMPTY_VALUE_DISPLAY
+        return 'Видео о нас' or EMPTY_VALUE_DISPLAY
 
     @classmethod
     def get_solo(cls):

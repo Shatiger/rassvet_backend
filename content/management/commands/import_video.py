@@ -24,7 +24,6 @@ class Command(BaseCommand):
             reader = csv.DictReader(f, delimiter='\t')
             for row in reader:
                 AboutUsVideo.objects.update_or_create(
-                    title=row['title'],
                     url=row['url'],
                 )
         self.stdout.write(self.style.SUCCESS("Импорт видео 'О нас' завершен."))
