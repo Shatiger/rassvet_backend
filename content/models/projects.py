@@ -13,7 +13,7 @@ from django.db import models
 from django.db.models import CheckConstraint, F, Q
 from ordered_model.models import OrderedModel
 
-from content.constants import IMAGE_CONTENT_TYPES
+from content.constants import IMAGE_CONTENT_TYPES, TITLE_LENGTH
 from content.mixins import TitleMixin
 from content.utils import ckeditor_function
 
@@ -27,8 +27,10 @@ class ProjectsStatus(models.TextChoices):
     COMPLETED = 'completed', 'Завершенный'
 
 
-class ProgramsProjects(TitleMixin, models.Model):
+class ProgramsProjects(models.Model):
     """Модель программ проектов."""
+
+    title = models.CharField('Заголовок', max_length=TITLE_LENGTH, unique=True)
 
     class Meta:
         """Класс Meta для ProgramsProjects, содержащий мета-данные."""
@@ -44,11 +46,6 @@ class ProgramsProjects(TitleMixin, models.Model):
 class Project(TitleMixin, OrderedModel):
     """Модель Проекта."""
 
-    logo = models.ImageField(
-        upload_to='projects/',
-        verbose_name='Логотип',
-        validators=[FileExtensionValidator(IMAGE_CONTENT_TYPES)],
-    )
     status = models.CharField(
         max_length=max(len(value) for value, _ in ProjectsStatus.choices),
         choices=ProjectsStatus.choices,
@@ -74,6 +71,11 @@ class Project(TitleMixin, OrderedModel):
         null=True,
         related_name='projects',
         verbose_name='Источник софинансирования - Партнёр',
+    )
+    logo = models.ImageField(
+        upload_to='projects/',
+        verbose_name='Логотип',
+        validators=[FileExtensionValidator(IMAGE_CONTENT_TYPES)],
     )
     program = models.ForeignKey(
         ProgramsProjects,
