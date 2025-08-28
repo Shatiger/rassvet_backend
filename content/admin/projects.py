@@ -61,6 +61,14 @@ class ProjectAdmin(CharCountAdminMixin, BaseOrderedModelAdmin):
     empty_value_display = '-пусто-'
     list_select_related = ('program', 'source_financing')
 
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        """Сортирует выпадающие списки в формах."""
+        if db_field.name in ('source_financing',):
+            kwargs['queryset'] = db_field.related_model.objects.order_by(
+                'name'
+            )
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
     @admin.display(description='Логотип')
     def logo_preview(self, obj):
         """Отображает превью логотипа."""
