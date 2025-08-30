@@ -6,13 +6,13 @@
 
 from django.contrib import admin
 
-from content.base_models import BaseOrderedModelAdmin
+from content.base_models import TopOrderedModelAdmin
 from content.constants import EMPTY_VALUE_DISPLAY
 from content.models import Gratitude
 
 
 @admin.register(Gratitude)
-class GratitudeAdmin(BaseOrderedModelAdmin):
+class GratitudeAdmin(TopOrderedModelAdmin):
     """Настройка отображения списка Gratitude и форм редактирования.
 
     Определяет отображаемые и редактируемые поля, фильтры, поиск и секции.

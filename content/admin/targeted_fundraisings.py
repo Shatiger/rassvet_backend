@@ -15,7 +15,7 @@ from ordered_model.admin import (
     OrderedInlineModelAdminMixin,
 )
 
-from content.base_models import BaseOrderedModelAdmin
+from content.base_models import TopOrderedModelAdmin
 from content.mixins import CharCountAdminMixin
 from content.models import (
     FundraisingPhoto,
@@ -58,7 +58,7 @@ class FundraisingPhotoInline(OrderedTabularInline):
 
 @admin.register(TargetedFundraising)
 class TargetedFundraisingAdmin(
-    CharCountAdminMixin, OrderedInlineModelAdminMixin, BaseOrderedModelAdmin
+    CharCountAdminMixin, OrderedInlineModelAdminMixin, TopOrderedModelAdmin
 ):
     """Конфигурация админки для модели TargetedFundraising.
 

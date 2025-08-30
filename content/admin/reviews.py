@@ -6,13 +6,13 @@
 
 from django.contrib import admin
 
-from content.base_models import BaseOrderedModelAdmin
+from content.base_models import TopOrderedModelAdmin
 from content.mixins import CharCountAdminMixin
 from content.models import Review
 
 
 @admin.register(Review)
-class ReviewAdmin(CharCountAdminMixin, BaseOrderedModelAdmin):
+class ReviewAdmin(CharCountAdminMixin, TopOrderedModelAdmin):
     """Настройка отображения списка Review и форм редактирования.
 
     Определяет отображаемые и редактируемые поля, фильтры, поиск и секции.

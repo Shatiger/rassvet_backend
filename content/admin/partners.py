@@ -7,13 +7,13 @@
 from django.contrib import admin
 from django.utils.html import format_html
 
-from content.base_models import BaseOrderedModelAdmin
+from content.base_models import TopOrderedModelAdmin
 from content.mixins import CharCountAdminMixin
 from content.models import Partner
 
 
 @admin.register(Partner)
-class PartnersAdmin(CharCountAdminMixin, BaseOrderedModelAdmin):
+class PartnersAdmin(CharCountAdminMixin, TopOrderedModelAdmin):
     """Настройка отображения списка Partner с предпросмотром логотипа."""
 
     charcount_fields = {

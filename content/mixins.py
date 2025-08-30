@@ -3,8 +3,9 @@
 from typing import Optional, Type
 
 from django.contrib import admin
-from django.db import models
+from django.db import models, transaction
 
+from ordered_model.models import OrderedModel
 from rest_framework.serializers import Serializer
 
 from .constants import ORDER_DEFAULT, TITLE_LENGTH
@@ -125,3 +126,33 @@ class CharCountAdminMixin(admin.ModelAdmin):
                 base_field.widget.attrs['data-max'] = str(max_value)
 
         return form
+
+
+class SafeOrderedInlineModelAdminMixin:
+    """Делает безопасное массовое удаление для OrderedInline."""
+
+    def save_formset(self, request, form, formset, change):
+        """Безопасное сохранение inline для ordered моделей."""
+        Model = formset.model
+        if not issubclass(Model, OrderedModel):
+            return super().save_formset(request, form, formset, change)
+        order_field = getattr(Model, 'order_field_name', 'order')
+        fk_name = formset.fk.name
+        with transaction.atomic():
+            instances = formset.save(commit=False)
+            deleted = list(getattr(formset, 'deleted_objects', []))
+            deleted.sort(
+                key=lambda o: getattr(o, order_field) or 0, reverse=True
+            )
+            for obj in deleted:
+                obj.delete()
+
+            deleted_pks = {obj.pk for obj in deleted if obj.pk}
+            parent = form.instance
+            for obj in instances:
+                if obj.pk and obj.pk in deleted_pks:
+                    continue
+                if getattr(obj, f'{fk_name}_id', None) is None:
+                    setattr(obj, fk_name, parent)
+                obj.save()
+            formset.save_m2m()
