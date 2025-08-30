@@ -9,11 +9,11 @@ from django.db.models import Count
 from django.contrib import admin
 
 from ordered_model.admin import (
-    OrderedModelAdmin,
     OrderedTabularInline,
     OrderedInlineModelAdminMixin,
 )
 
+from content.base_models import SafeOrderedModelAdmin
 from content.mixins import SafeOrderedInlineModelAdminMixin
 from content.models.report import Report, Chapter
 
@@ -32,7 +32,7 @@ class ReportInline(OrderedTabularInline):
 class ChapterAdmin(
     SafeOrderedInlineModelAdminMixin,
     OrderedInlineModelAdminMixin,
-    OrderedModelAdmin,
+    SafeOrderedModelAdmin,
 ):
     """Модель администрирования разделов отчетов."""
 
