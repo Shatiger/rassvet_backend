@@ -40,9 +40,8 @@ class GalleryImageInline(OrderedTabularInline):
         'image',
         'name',
         'move_up_down_links',
-        'order',
     )
-    readonly_fields = ('move_up_down_links', 'order')
+    readonly_fields = ('move_up_down_links',)
     ordering = ('order',)
     extra = 1
     max_num = 15

@@ -13,7 +13,11 @@ class SupervisorAdmin(CharCountAdminMixin, TopOrderedModelAdmin):
         'name': 19,
         'position': 70,
     }
-    list_display = ('name', 'position', 'move_up_down_links', 'order')
+    list_display = (
+        'name',
+        'position',
+        'move_up_down_links',
+    )
     readonly_fields = ('created_at', 'updated_at')
     list_filter = (('directions', admin.RelatedOnlyFieldListFilter),)
     filter_horizontal = ('directions',)

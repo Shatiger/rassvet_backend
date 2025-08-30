@@ -13,6 +13,5 @@ class LiteratureAdmin(TopOrderedModelAdmin):
         'author',
         'publication_year',
         'move_up_down_links',
-        'order',
     )
     search_fields = ('title', 'author')

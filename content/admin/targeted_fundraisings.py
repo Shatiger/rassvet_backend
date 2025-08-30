@@ -41,8 +41,11 @@ class FundraisingPhotoInline(OrderedTabularInline):
     """Inline-класс для фотографий, прикреплённых к сбору."""
 
     model = FundraisingPhoto
-    fields = ('image', 'move_up_down_links', 'order')
-    readonly_fields = ('move_up_down_links', 'order')
+    fields = (
+        'image',
+        'move_up_down_links',
+    )
+    readonly_fields = ('move_up_down_links',)
     ordering = ('order',)
     min_num = 1
     max_num = 3
