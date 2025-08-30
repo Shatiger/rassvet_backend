@@ -16,7 +16,10 @@ from ordered_model.admin import (
 )
 
 from content.base_models import TopOrderedModelAdmin
-from content.mixins import CharCountAdminMixin
+from content.mixins import (
+    CharCountAdminMixin,
+    SafeOrderedInlineModelAdminMixin,
+)
 from content.models import (
     FundraisingPhoto,
     TargetedFundraising,
@@ -38,11 +41,8 @@ class FundraisingPhotoInline(OrderedTabularInline):
     """Inline-класс для фотографий, прикреплённых к сбору."""
 
     model = FundraisingPhoto
-    fields = (
-        'image',
-        'move_up_down_links',
-    )
-    readonly_fields = ('move_up_down_links',)
+    fields = ('image', 'move_up_down_links', 'order')
+    readonly_fields = ('move_up_down_links', 'order')
     ordering = ('order',)
     min_num = 1
     max_num = 3
@@ -58,7 +58,10 @@ class FundraisingPhotoInline(OrderedTabularInline):
 
 @admin.register(TargetedFundraising)
 class TargetedFundraisingAdmin(
-    CharCountAdminMixin, OrderedInlineModelAdminMixin, TopOrderedModelAdmin
+    CharCountAdminMixin,
+    SafeOrderedInlineModelAdminMixin,
+    OrderedInlineModelAdminMixin,
+    TopOrderedModelAdmin,
 ):
     """Конфигурация админки для модели TargetedFundraising.
 

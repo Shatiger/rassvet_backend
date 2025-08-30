@@ -14,6 +14,7 @@ from ordered_model.admin import (
     OrderedInlineModelAdminMixin,
 )
 
+from content.mixins import SafeOrderedInlineModelAdminMixin
 from content.models.report import Report, Chapter
 
 
@@ -21,19 +22,18 @@ class ReportInline(OrderedTabularInline):
     """Модель администрирования документов."""
 
     model = Report
-    fields = (
-        'title',
-        'file',
-        'download_icon',
-        'move_up_down_links',
-    )
-    readonly_fields = ('move_up_down_links',)
+    fields = ('title', 'file', 'download_icon', 'move_up_down_links', 'order')
+    readonly_fields = ('move_up_down_links', 'order')
     ordering = ('order',)
     extra = 1
 
 
 @admin.register(Chapter)
-class ChapterAdmin(OrderedInlineModelAdminMixin, OrderedModelAdmin):
+class ChapterAdmin(
+    SafeOrderedInlineModelAdminMixin,
+    OrderedInlineModelAdminMixin,
+    OrderedModelAdmin,
+):
     """Модель администрирования разделов отчетов."""
 
     list_display = ('title', 'count', 'move_up_down_links')
