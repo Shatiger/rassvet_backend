@@ -88,9 +88,9 @@ class TargetedFundraising(
         пустого HTML-контента и присваивает None.
         """
         if self.top_text_block == '<p>&nbsp;</p>':
-            self.top_text_block = None
+            self.top_text_block = ''
         if self.bottom_text_block == '<p>&nbsp;</p>':
-            self.bottom_text_block = None
+            self.bottom_text_block = ''
         super().save(*args, **kwargs)
 
 
