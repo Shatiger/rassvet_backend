@@ -15,6 +15,7 @@ def ckeditor_function(
     blank=False,
     null=False,
     validators=None,
+    help_text='',
 ):
     """Функция создающая text поля для моделей проекта."""
     return CKEditor5Field(
@@ -25,11 +26,12 @@ def ckeditor_function(
         validators=validators
         if validators is not None
         else [validate_not_empty_html],
+        help_text=help_text,
     )
 
 
 def html_cleaner(field, tags):
     """Используется для очистки ckeditor полей от дефолтных тегов."""
     if field == tags:
-        return None
+        return ''
     return field

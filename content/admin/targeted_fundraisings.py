@@ -10,10 +10,15 @@
 
 from django.contrib import admin
 from django.core.exceptions import ValidationError
+from ordered_model.admin import (
+    OrderedTabularInline,
+    OrderedInlineModelAdminMixin,
+)
 
+from content.base_models import BaseOrderedModelAdmin
+from content.mixins import CharCountAdminMixin
 from content.models import (
     FundraisingPhoto,
-    FundraisingTextBlock,
     TargetedFundraising,
 )
 
@@ -29,33 +34,20 @@ def validate_forms(forms, error_detail):
         raise ValidationError(error_detail)
 
 
-class BaseValidatedInline(admin.TabularInline):
-    """Базовый inline-класс с валидацией минимального количества объектов."""
-
-    extra = 0
-    min_num = 1
-    max_num = 3
-    validate_min = True
-    validation_error_message = 'Необходим минимум один элемент'
-
-    def get_formset(self, request, obj=None, **kwargs):
-        """Переопределяет formset для добавления кастомной валидации."""
-        formset = super().get_formset(request, obj, **kwargs)
-        error_message = self.validation_error_message
-        original_clean = formset.clean
-
-        def custom_clean(self):
-            original_clean(self)
-            validate_forms(self.forms, error_message)
-
-        formset.clean = custom_clean
-        return formset
-
-
-class FundraisingPhotoInline(BaseValidatedInline):
+class FundraisingPhotoInline(OrderedTabularInline):
     """Inline-класс для фотографий, прикреплённых к сбору."""
 
     model = FundraisingPhoto
+    fields = (
+        'image',
+        'move_up_down_links',
+    )
+    readonly_fields = ('move_up_down_links',)
+    ordering = ('order',)
+    min_num = 1
+    max_num = 3
+
+    validate_min = True
     validation_error_message = 'Должна быть как минимум одна фотография.'
 
     def get_queryset(self, request):
@@ -64,32 +56,42 @@ class FundraisingPhotoInline(BaseValidatedInline):
         return qs.select_related('fundraising')
 
 
-class FundraisingTextBlockInline(BaseValidatedInline):
-    """Inline-класс для текстовых блоков, прикреплённых к сбору."""
-
-    model = FundraisingTextBlock
-    validation_error_message = 'Должен быть как минимум один текстовый блок.'
-
-    def get_queryset(self, request):
-        """Возвращает queryset блоков текста с подгруженным FK на сбор."""
-        qs = super().get_queryset(request)
-        return qs.select_related('fundraising')
-
-
 @admin.register(TargetedFundraising)
-class TargetedFundraisingAdmin(admin.ModelAdmin):
+class TargetedFundraisingAdmin(
+    CharCountAdminMixin, OrderedInlineModelAdminMixin, BaseOrderedModelAdmin
+):
     """Конфигурация админки для модели TargetedFundraising.
 
     Отвечает за отображение, фильтрацию, редактирование и действия для сборов.
     """
 
-    list_display = ('title', 'status', 'fundraising_link', 'order')
-    list_editable = ('order', 'status')
-    list_filter = ('status', 'created_at')
+    charcount_fields = {
+        'title': 60,
+        'short_description': 350,
+    }
+    list_display = (
+        'title',
+        'status',
+        'fundraising_link',
+        'move_up_down_links',
+    )
+    list_editable = ('status',)
+    list_filter = (
+        'status',
+        'created_at',
+    )
     search_fields = ('title',)
-    readonly_fields = ('created_at', 'updated_at')
-    inlines = [FundraisingPhotoInline, FundraisingTextBlockInline]
-    actions = ['move_to_active', 'move_to_completed']
+    readonly_fields = (
+        'created_at',
+        'updated_at',
+    )
+    inlines = [
+        FundraisingPhotoInline,
+    ]
+    actions = [
+        'move_to_active',
+        'move_to_completed',
+    ]
 
     fieldsets = (
         (
@@ -100,7 +102,9 @@ class TargetedFundraisingAdmin(admin.ModelAdmin):
                     'short_description',
                     'fundraising_link',
                     'status',
-                    'order',
+                    'top_text_block',
+                    'center_text_block',
+                    'bottom_text_block',
                 )
             },
         ),
@@ -113,7 +117,9 @@ class TargetedFundraisingAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         """Возвращает queryset сборов с предзагруженными зависимостями."""
         q_set = super().get_queryset(request)
-        return q_set.prefetch_related('photos', 'text_blocks')
+        return q_set.prefetch_related(
+            'photos',
+        )
 
     @admin.action(description='Переместить в актуальные')
     def move_to_active(self, request, queryset):

@@ -21,10 +21,10 @@ class AboutUsVideoAdmin(admin.ModelAdmin):
       единственного экземпляра.
     """
 
-    list_display = ('title', 'url')
+    list_display = ('video_orientation', 'url')
     readonly_fields = ('created_at', 'updated_at')
     fieldsets = (
-        ('Основная информация', {'fields': ('title', 'url')}),
+        ('Основная информация', {'fields': ('video_orientation', 'url')}),
         (
             'Служебная информация',
             {'fields': ('created_at', 'updated_at'), 'classes': ('collapse',)},

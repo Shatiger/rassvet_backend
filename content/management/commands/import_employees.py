@@ -79,7 +79,6 @@ class Command(ImporterBase):
                     if field_idx + 1 < len(fields)
                     else ''
                 )
-                doc_name = field_value.split('/')[-1]
                 on_main = doc_type.lower().strip() == 'лента'
                 doc_type_instance = None
                 if doc_type and not on_main:
@@ -87,7 +86,6 @@ class Command(ImporterBase):
                         name=doc_type
                     )
                 document = Document.objects.create(
-                    name=doc_name,
                     employee=instance,
                     type=doc_type_instance,
                     on_main_page=on_main,

@@ -88,7 +88,8 @@ class News(TimestampMixin, TitleMixin, CleanEmptyHTMLMixin, models.Model):
         default=DetailPageChoices.NONE,
     )
     detail_page_link = models.URLField(
-        'Ссылка на подробную страницу', blank=True, null=True
+        'Ссылка на подробную страницу',
+        blank=True,
     )
     show_on_main = models.BooleanField(
         'Отображение на странице Новости', default=True
@@ -96,10 +97,12 @@ class News(TimestampMixin, TitleMixin, CleanEmptyHTMLMixin, models.Model):
     full_text = ckeditor_function(
         verbose_name='Основной текст',
         blank=True,
-        null=True,
         validators=[],
     )
-    video_url = models.URLField('Ссылка на видео', blank=True, null=True)
+    video_url = models.URLField(
+        'Ссылка на видео',
+        blank=True,
+    )
     clean_html_fields = ('full_text', 'summary')
 
     class Meta:

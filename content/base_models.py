@@ -21,4 +21,3 @@ class BaseOrderedModelAdmin(OrderedModelAdmin):
         super().save_model(request, obj, form, change)
         if change is False:
             obj.top()
-            obj.save()

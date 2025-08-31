@@ -49,7 +49,6 @@ class Coaching(TitleMixin, OrderedModel):
         max_length=CHAR_FIELD_LENGTH,
         verbose_name='место',
         blank=True,
-        null=True,
     )
     course_format = models.CharField(
         max_length=max(len(value) for value, _ in CourseFormatChoices.choices),
@@ -65,7 +64,6 @@ class Coaching(TitleMixin, OrderedModel):
         verbose_name='Ссылка на страницу новости',
         help_text='Ссылка вводится только для новости',
         blank=True,
-        null=True,
     )
 
     class Meta(OrderedModel.Meta):

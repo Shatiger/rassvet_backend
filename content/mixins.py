@@ -2,6 +2,7 @@
 
 from typing import Optional, Type
 
+from django.contrib import admin
 from django.db import models
 
 from rest_framework.serializers import Serializer
@@ -84,3 +85,43 @@ class MultiSerializerViewSetMixin:
             return self.serializer_classes[self.action]
         except (KeyError, TypeError):
             return super().get_serializer_class()
+
+
+class CharCountAdminMixin(admin.ModelAdmin):
+    """Миксин для Django Admin, добавляющий подсчёт символов."""
+
+    charcount_fields: dict[str, int | dict[str, int]] = {}
+
+    class Media:
+        js = ('custom_admin/js/char_count.js',)
+        css = {'all': ('custom_admin/css/char_count.css',)}
+
+    def get_form(self, request, obj=None, **kwargs):
+        """Переопределяет метод get_form.
+
+        Позволяет:
+        1. Проставить data-атрибуты в HTML-виджетах выбранных полей.
+        2. Добавить help_text с рекомендациями по количеству символов.
+        """
+        form = super().get_form(request, obj, **kwargs)
+        cfg = getattr(self, 'charcount_fields', {}) or {}
+
+        for name, limits in cfg.items():
+            if name not in form.base_fields:
+                continue
+            base_field = form.base_fields[name]
+            base_field.widget.attrs['data-charcount'] = '1'
+
+            min_value = max_value = None
+            if isinstance(limits, int):
+                max_value = limits
+            elif isinstance(limits, dict):
+                min_value = limits.get('min')
+                max_value = limits.get('max')
+
+            if min_value is not None:
+                base_field.widget.attrs['data-min'] = str(min_value)
+            if max_value is not None:
+                base_field.widget.attrs['data-max'] = str(max_value)
+
+        return form

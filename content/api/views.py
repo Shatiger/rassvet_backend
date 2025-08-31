@@ -174,7 +174,6 @@ class TargetedFundraisingViewSet(
         if self.action == 'retrieve':
             return TargetedFundraising.objects.prefetch_related(
                 'photos',
-                'text_blocks',
             )
 
         return TargetedFundraising.objects.prefetch_related('photos')

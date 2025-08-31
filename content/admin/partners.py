@@ -8,15 +8,19 @@ from django.contrib import admin
 from django.utils.html import format_html
 
 from content.base_models import BaseOrderedModelAdmin
+from content.mixins import CharCountAdminMixin
 from content.models import Partner
 
 
 @admin.register(Partner)
-class PartnersAdmin(BaseOrderedModelAdmin):
+class PartnersAdmin(CharCountAdminMixin, BaseOrderedModelAdmin):
     """Настройка отображения списка Partner с предпросмотром логотипа."""
 
+    charcount_fields = {
+        'name': 50,
+        'description': 200,
+    }
     list_display = ('name', 'logo_preview', 'move_up_down_links')
-    list_filter = ('created_at', 'updated_at')
     search_fields = ('name', 'description')
     readonly_fields = ('created_at', 'updated_at', 'logo_preview')
     fieldsets = (

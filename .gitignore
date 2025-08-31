@@ -140,7 +140,7 @@ dmypy.json
 .vscode
 # .isort.cfg
 
-static/
+/static/
 media/
 media_data/
 data/

@@ -24,7 +24,6 @@ class Gratitude(TimestampMixin, OrderedModel):
         max_length=TITLE_LENGTH,
         help_text='"Заголовок" не отображается на сайте.',
         blank=True,
-        null=True,
     )
     file = models.ImageField(
         verbose_name='Файл благодарности',

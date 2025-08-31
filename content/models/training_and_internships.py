@@ -65,7 +65,6 @@ class TrainingAndInternships(TitleMixin, CleanEmptyHTMLMixin, OrderedModel):
     short_description = models.TextField(verbose_name='Краткое описание')
     text_block = ckeditor_function(
         blank=True,
-        null=True,
         verbose_name='Текстовый блок',
         validators=[],
     )

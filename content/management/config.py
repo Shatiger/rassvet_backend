@@ -97,6 +97,9 @@ MODEL_CONFIG = {
             'title': {'source': 'title'},
             'short_description': {'source': 'short_description'},
             'fundraising_link': {'default': ''},
+            'top_text_block': {'source': 'text1', 'default': ''},
+            'center_text_block': {'source': 'text2', 'default': ''},
+            'bottom_text_block': {'source': 'text3', 'default': ''},
             'status': {
                 'source': 'status',
                 'transform': lambda val, row, row_num: (

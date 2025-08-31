@@ -14,6 +14,7 @@ IMAGE_CONTENT_TYPES = [
     'jpeg',
     'png',
     'webp',
+    'jfif',
 ]
 """Формат загрузки файлов для ImageField."""
 

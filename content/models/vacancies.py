@@ -50,14 +50,13 @@ class Vacancy(TimestampMixin, OrderedModel):
     additional_description = ckeditor_function(
         verbose_name='Дополнительное описание',
         blank=True,
-        null=True,
         validators=[],
     )
     detailed_description = ckeditor_function(
-        verbose_name='Описание вакансии', blank=True, null=True, validators=[]
+        verbose_name='Описание вакансии', blank=True, validators=[]
     )
     external_link = models.URLField(
-        blank=True, null=True, verbose_name='Ссылка на внешнюю платформу'
+        blank=True, verbose_name='Ссылка на внешнюю платформу'
     )
 
     class Meta(OrderedModel.Meta):

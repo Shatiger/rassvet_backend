@@ -7,8 +7,9 @@
 """
 
 from django.contrib import admin
+from ordered_model.admin import OrderedModelAdmin
 
-from content.base_models import BaseOrderedModelAdmin
+from content.mixins import CharCountAdminMixin
 from content.models import Document, Employee, TypeDocument
 
 
@@ -32,7 +33,7 @@ class DocumentInline(admin.TabularInline):
     validate_min = False
     autocomplete_fields = ['type']
     verbose_name = 'Документ'
-    verbose_name_plural = 'Документы'
+    verbose_name_plural = 'Дипломы и сертификаты'
 
     def get_queryset(self, request):
         """Оптимизация для инлайнов: select_related для ForeignKey (type)."""
@@ -41,12 +42,16 @@ class DocumentInline(admin.TabularInline):
 
 
 @admin.register(Employee)
-class EmployeeAdmin(BaseOrderedModelAdmin):
+class EmployeeAdmin(CharCountAdminMixin, OrderedModelAdmin):
     """Конфигурация админки для модели Employee.
 
     Определяет отображаемые поля, фильтрацию, поиск, inline-классы и fieldsets.
     """
 
+    charcount_fields = {
+        'name': 19,
+        'main_specialities': 45,
+    }
     list_display = ('name', 'category_on_main', 'move_up_down_links')
     list_editable = ('category_on_main',)
     list_filter = ('created_at', 'updated_at')
@@ -61,13 +66,13 @@ class EmployeeAdmin(BaseOrderedModelAdmin):
                     'name',
                     'image',
                     'main_specialities',
+                    'trainings',
                     'interviews',
                     'specialists_register',
                     'category_on_main',
                     'specialities',
                     'education',
                     'additional_education',
-                    'trainings',
                 )
             },
         ),

@@ -7,6 +7,7 @@
 """
 
 import html
+import os
 
 from django.core.validators import FileExtensionValidator
 from django.db import models
@@ -27,7 +28,10 @@ def upload_file(instance, filename):
 class Employee(TimestampMixin, OrderedModel):
     """Модель для хранения информации о членах команды."""
 
-    name = models.CharField(max_length=100, verbose_name='ФИО')
+    name = models.CharField(
+        max_length=100,
+        verbose_name='ФИО',
+    )
     image = models.ImageField(
         upload_to='team',
         verbose_name='Фото',
@@ -41,7 +45,7 @@ class Employee(TimestampMixin, OrderedModel):
         verbose_name='Реестр специалистов', blank=True
     )
     category_on_main = models.BooleanField(
-        default=True,
+        default=False,
         verbose_name='Отображать категории документов на главной странице',
     )
     specialities = CKEditor5Field(
@@ -122,7 +126,6 @@ class TypeDocument(models.Model):
 class Document(models.Model):
     """Модель для хранения документов."""
 
-    name = models.CharField(max_length=255, verbose_name='Название документа')
     file = models.ImageField(
         upload_to=upload_file,
         verbose_name='Файл документа',
@@ -130,7 +133,7 @@ class Document(models.Model):
     )
     type = models.ForeignKey(
         TypeDocument,
-        on_delete=models.DO_NOTHING,
+        on_delete=models.PROTECT,
         blank=True,
         null=True,
         related_name='documents',
@@ -150,8 +153,15 @@ class Document(models.Model):
         """Класс Meta для модели Document, содержащий мета-данные."""
 
         verbose_name = 'Документ'
-        verbose_name_plural = 'Документы'
+        verbose_name_plural = 'Дипломы и сертификаты'
+        ordering = ['employee__name', 'type__name', 'file']
 
     def __str__(self):
         """Возвращает строковое представление документа."""
-        return self.name
+        filename = os.path.basename(self.file.name or '')
+        parts = [
+            self.employee.name if self.employee_id else 'без сотрудника',
+            self.type.name if self.type_id else 'без типа',
+            filename or 'без файла',
+        ]
+        return ' — '.join(parts)

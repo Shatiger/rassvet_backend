@@ -1,0 +1,15 @@
+.char-count-hint {
+  display: block;
+  width: 100%;
+  flex: 0 0 100%;
+  clear: both;
+  margin-top: 4px;
+  margin-bottom: 6px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #666;
+}
+
+.char-count-hint.is-invalid {
+  color: #b91c1c;
+}

@@ -142,7 +142,7 @@ LANGUAGE_CODE = 'ru-RU'
 
 USE_I18N = True
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Irkutsk'
 
 USE_TZ = True
 
@@ -158,16 +158,21 @@ AUTH_USER_MODEL = 'users.RassvetUser'
 
 LOGIN_URL = '/admin/login/'
 
-# =================================================
-# !!! Изменить на почтовый клиент после отладки !!!
-# =================================================
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_HOST = 'smtp.example.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'my_email@example.com'
-EMAIL_HOST_PASSWORD = 'mypassword'
-DEFAULT_FROM_EMAIL = 'my_email@example.com'
+EMAIL_BACKEND = os.getenv(
+    'EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend'
+)
+EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.yandex.ru')
+EMAIL_PORT = int(os.getenv('EMAIL_PORT', '465'))
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'False') == 'True'
+EMAIL_USE_SSL = os.getenv('EMAIL_USE_SSL', 'True') == 'True'
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
+EMAIL_TIMEOUT = int(os.getenv('EMAIL_TIMEOUT', '10'))
+
+DEFAULT_FROM_EMAIL = os.getenv(
+    'DEFAULT_FROM_EMAIL', EMAIL_HOST_USER or 'webmaster@localhost'
+)  # noqa: E501
+SERVER_EMAIL = os.getenv('SERVER_EMAIL', DEFAULT_FROM_EMAIL)
 
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [

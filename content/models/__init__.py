@@ -33,7 +33,6 @@ from .reviews import Review
 from .supervisors import Supervisor
 from .targeted_fundraisings import (
     FundraisingPhoto,
-    FundraisingTextBlock,
     TargetedFundraising,
 )
 from .useful_links import ArticleUsefulLinks, ChapterUsefulLinks
@@ -61,7 +60,6 @@ __all__ = [
     'Document',
     'Employee',
     'FundraisingPhoto',
-    'FundraisingTextBlock',
     'GalleryImage',
     'Gratitude',
     'Literature',
