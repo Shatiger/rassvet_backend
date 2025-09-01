@@ -17,6 +17,7 @@ from content.mixins import (
     CleanEmptyHTMLMixin,
     TimestampMixin,
     TitleMixin,
+    VideoOrientationMixin,
 )
 from content.validators import validate_not_empty_html
 from content.utils import ckeditor_function
@@ -46,7 +47,13 @@ class Direction(TimestampMixin, models.Model):
         return self.name
 
 
-class News(TimestampMixin, TitleMixin, CleanEmptyHTMLMixin, models.Model):
+class News(
+    VideoOrientationMixin,
+    TimestampMixin,
+    TitleMixin,
+    CleanEmptyHTMLMixin,
+    models.Model,
+):
     """Модель новости, содержащая информацию и детализированные поля."""
 
     class DetailPageChoices(models.TextChoices):
@@ -103,6 +110,13 @@ class News(TimestampMixin, TitleMixin, CleanEmptyHTMLMixin, models.Model):
         'Ссылка на видео',
         blank=True,
     )
+    video_orientation = models.CharField(
+        max_length=VideoOrientationMixin.video_orientation_max_length(),
+        choices=VideoOrientationMixin.VideoOrientationChoices.choices,
+        default=VideoOrientationMixin.VideoOrientationChoices.HORIZONTAL,
+        blank=True,
+        verbose_name='Ориентация видео',
+    )
     clean_html_fields = ('full_text', 'summary')
 
     class Meta:
@@ -140,6 +154,8 @@ class News(TimestampMixin, TitleMixin, CleanEmptyHTMLMixin, models.Model):
             )
         if self.detail_page_type == 'link' and not self.detail_page_link:
             raise ValidationError('Укажите ссылку на внешнюю страницу.')
+        if self.video_url and not self.video_orientation:
+            raise ValidationError('Укажите ориентацию видео.')
 
 
 class GalleryImage(TimestampMixin, OrderedModel):
