@@ -55,6 +55,7 @@ class TargetedFundraising(
     top_text_block = ckeditor_function(
         verbose_name='Верхний текстовый блок',
         blank=True,
+        null=True,
         validators=[],
         help_text='Рекомендованное количество символов - 370',
     )
@@ -64,6 +65,7 @@ class TargetedFundraising(
     bottom_text_block = ckeditor_function(
         verbose_name='Нижний текстовый блок',
         blank=True,
+        null=True,
         validators=[],
         help_text='Рекомендованное количество символов - 290',
     )
