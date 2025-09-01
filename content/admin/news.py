@@ -85,12 +85,7 @@ class NewsAdmin(OrderedInlineModelAdminMixin, admin.ModelAdmin):
         ),
         (
             'Контент подробной страницы',
-            {
-                'fields': (
-                    'full_text',
-                    'video_url',
-                )
-            },
+            {'fields': ('full_text', 'video_url', 'video_orientation')},
         ),
     )
 

@@ -8,24 +8,16 @@
 from django.db import models
 
 from content.constants import EMPTY_VALUE_DISPLAY
-from content.mixins import TimestampMixin
+from content.mixins import TimestampMixin, VideoOrientationMixin
 
 
-class AboutUsVideo(TimestampMixin, models.Model):
+class AboutUsVideo(VideoOrientationMixin, TimestampMixin, models.Model):
     """Модель для хранения информации о видео в разделе 'О нас'."""
 
-    class VideoOrientationChoices(models.TextChoices):
-        """Выбор ориентации видео."""
-
-        HORIZONTAL = 'horizontal', 'Горизонтальная'
-        VERTICAL = 'vertical', 'Вертикальная'
-
     video_orientation = models.CharField(
-        max_length=max(
-            len(value) for value, _ in VideoOrientationChoices.choices
-        ),
-        choices=VideoOrientationChoices.choices,
-        default=VideoOrientationChoices.HORIZONTAL,
+        max_length=VideoOrientationMixin.video_orientation_max_length(),
+        choices=VideoOrientationMixin.VideoOrientationChoices.choices,
+        default=VideoOrientationMixin.VideoOrientationChoices.HORIZONTAL,
         verbose_name='Ориентация видео',
     )
     url = models.URLField('Ссылка на видео')

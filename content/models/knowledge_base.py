@@ -12,7 +12,7 @@ from django.core.validators import FileExtensionValidator
 from django.db import models
 
 from content.constants import IMAGE_CONTENT_TYPES
-from content.mixins import TitleMixin
+from content.mixins import TitleMixin, VideoOrientationMixin
 from content.utils import ckeditor_function
 
 
@@ -64,6 +64,13 @@ class Article(TitleMixin, models.Model):
         verbose_name='Ссылка на видео',
         blank=True,
     )
+    video_orientation = models.CharField(
+        max_length=VideoOrientationMixin.video_orientation_max_length(),
+        choices=VideoOrientationMixin.VideoOrientationChoices.choices,
+        default=VideoOrientationMixin.VideoOrientationChoices.HORIZONTAL,
+        blank=True,
+        verbose_name='Ориентация видео',
+    )
 
     class Meta:
         """Класс Meta для Article, содержащий мета-данные."""
@@ -80,6 +87,8 @@ class Article(TitleMixin, models.Model):
         """Валидация поля link в зависмисти от выбора в поле detailed_page."""
         if self.detailed_page == 'link' and self.link == '':
             raise ValidationError('Заполни "Ссылка на существующую страницу".')
+        if self.video_link and not self.video_orientation:
+            raise ValidationError('Укажите ориентацию видео.')
 
 
 class ArticleTextBlock(models.Model):
