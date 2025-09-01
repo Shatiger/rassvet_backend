@@ -14,9 +14,12 @@ from content.models import Document, Employee, TypeDocument
 
 
 @admin.register(TypeDocument)
-class TypeDocumentInline(admin.ModelAdmin):
+class TypeDocumentInline(CharCountAdminMixin, admin.ModelAdmin):
     """Настройка отображения модели TypeDocument в админке."""
 
+    charcount_fields = {
+        'name': 35,
+    }
     fields = ('name',)
     search_fields = ('name',)
 

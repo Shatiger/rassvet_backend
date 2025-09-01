@@ -111,7 +111,6 @@ class TypeDocument(models.Model):
     name = models.CharField(
         max_length=100,
         verbose_name='Название типа документа',
-        help_text='максимальное количество символов - 35',
     )
 
     class Meta:
