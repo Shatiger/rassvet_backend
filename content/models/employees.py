@@ -109,7 +109,9 @@ class TypeDocument(models.Model):
     """Модель для хранения типов документов."""
 
     name = models.CharField(
-        max_length=100, verbose_name='Название типа документа'
+        max_length=100,
+        verbose_name='Название типа документа',
+        help_text='максимальное количество символов - 35',
     )
 
     class Meta:
