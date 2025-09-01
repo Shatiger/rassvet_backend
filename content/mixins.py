@@ -125,3 +125,21 @@ class CharCountAdminMixin(admin.ModelAdmin):
                 base_field.widget.attrs['data-max'] = str(max_value)
 
         return form
+
+
+class VideoOrientationMixin(models.Model):
+    """Миксин с перечислением ориентаций и хелпером для max_length."""
+
+    class VideoOrientationChoices(models.TextChoices):
+        HORIZONTAL = 'horizontal', 'Горизонтальная'
+        VERTICAL = 'vertical', 'Вертикальная'
+
+    @classmethod
+    def video_orientation_max_length(cls) -> int:
+        """Максимальная длина значения среди choices (для max_length)."""
+        return max(
+            len(value) for value, _ in cls.VideoOrientationChoices.choices
+        )
+
+    class Meta:
+        abstract = True
