@@ -9,7 +9,7 @@
 from django.contrib import admin
 from django.utils.html import format_html
 
-from content.base_models import BaseOrderedModelAdmin
+from content.base_models import TopOrderedModelAdmin
 from content.mixins import CharCountAdminMixin
 from content.models.projects import ProgramsProjects, Project, ProjectPhoto
 
@@ -35,7 +35,7 @@ class ProjectPhotoAdmin(admin.StackedInline):
 
 
 @admin.register(Project)
-class ProjectAdmin(CharCountAdminMixin, BaseOrderedModelAdmin):
+class ProjectAdmin(CharCountAdminMixin, TopOrderedModelAdmin):
     """Админ зона Проектов."""
 
     charcount_fields = {

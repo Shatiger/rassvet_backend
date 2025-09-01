@@ -7,7 +7,7 @@
 
 from django.contrib import admin
 
-from content.base_models import BaseOrderedModelAdmin
+from content.base_models import TopOrderedModelAdmin
 from content.models.coaching import Coaching, CoachingPhoto
 
 
@@ -20,7 +20,7 @@ class CoachingPhotoAdmin(admin.StackedInline):
 
 
 @admin.register(Coaching)
-class CoachingAdmin(BaseOrderedModelAdmin):
+class CoachingAdmin(TopOrderedModelAdmin):
     """Админ зона Coaching."""
 
     list_display = (

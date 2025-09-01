@@ -108,10 +108,6 @@ MODEL_CONFIG = {
                     else FundraisingStatus.COMPLETED
                 ),
             },
-            'order': {
-                'source': 'order',
-                'default': 0,
-            },
         },
         'required_fields': ['title', 'short_description'],
     },

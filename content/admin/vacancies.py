@@ -2,13 +2,13 @@
 
 from django.contrib import admin
 
-from content.base_models import BaseOrderedModelAdmin
+from content.base_models import TopOrderedModelAdmin
 
 from content.models import Vacancy
 
 
 @admin.register(Vacancy)
-class VacancyAdmin(BaseOrderedModelAdmin):
+class VacancyAdmin(TopOrderedModelAdmin):
     """Административная панель для управления вакансиями."""
 
     list_display = [

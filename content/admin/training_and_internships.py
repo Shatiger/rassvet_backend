@@ -7,7 +7,7 @@
 
 from django.contrib import admin
 
-from content.base_models import BaseOrderedModelAdmin
+from content.base_models import TopOrderedModelAdmin
 from content.models.training_and_internships import (
     TrainingAndInternships,
     TrainingAndInternshipsPhoto,
@@ -23,7 +23,7 @@ class TrainingAndInternshipsPhotoInline(admin.TabularInline):
 
 
 @admin.register(TrainingAndInternships)
-class TrainingAndInternshipsAdmin(BaseOrderedModelAdmin):
+class TrainingAndInternshipsAdmin(TopOrderedModelAdmin):
     """Конфигурация админки для модели TrainingAndInternships."""
 
     list_display = [

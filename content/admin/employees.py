@@ -7,8 +7,8 @@
 """
 
 from django.contrib import admin
-from ordered_model.admin import OrderedModelAdmin
 
+from content.base_models import SafeOrderedModelAdmin
 from content.mixins import CharCountAdminMixin
 from content.models import Document, Employee, TypeDocument
 
@@ -45,7 +45,7 @@ class DocumentInline(admin.TabularInline):
 
 
 @admin.register(Employee)
-class EmployeeAdmin(CharCountAdminMixin, OrderedModelAdmin):
+class EmployeeAdmin(CharCountAdminMixin, SafeOrderedModelAdmin):
     """Конфигурация админки для модели Employee.
 
     Определяет отображаемые поля, фильтрацию, поиск, inline-классы и fieldsets.

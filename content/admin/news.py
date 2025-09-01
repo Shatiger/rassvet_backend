@@ -7,6 +7,7 @@ from ordered_model.admin import (
     OrderedInlineModelAdminMixin,
 )
 
+from content.mixins import SafeOrderedInlineModelAdminMixin
 from content.models import News, Direction, GalleryImage, Project
 
 
@@ -47,7 +48,11 @@ class GalleryImageInline(OrderedTabularInline):
 
 
 @admin.register(News)
-class NewsAdmin(OrderedInlineModelAdminMixin, admin.ModelAdmin):
+class NewsAdmin(
+    SafeOrderedInlineModelAdminMixin,
+    OrderedInlineModelAdminMixin,
+    admin.ModelAdmin,
+):
     """Настройка административного интерфейса для модели News."""
 
     inlines = [GalleryImageInline]
