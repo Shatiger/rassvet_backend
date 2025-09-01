@@ -125,3 +125,25 @@ class CharCountAdminMixin(admin.ModelAdmin):
                 base_field.widget.attrs['data-max'] = str(max_value)
 
         return form
+
+
+class VideoOrientationMixin(models.Model):
+    """Абстрактная модель для добавления поля ориентации видео."""
+
+    class VideoOrientationChoices(models.TextChoices):
+        """Выбор ориентации видео."""
+
+        HORIZONTAL = 'horizontal', 'Горизонтальная'
+        VERTICAL = 'vertical', 'Вертикальная'
+
+    video_orientation = models.CharField(
+        max_length=max(
+            len(value) for value, _ in VideoOrientationChoices.choices
+        ),
+        choices=VideoOrientationChoices.choices,
+        default=VideoOrientationChoices.HORIZONTAL,
+        verbose_name='Ориентация видео',
+    )
+
+    class Meta:
+        abstract = True
