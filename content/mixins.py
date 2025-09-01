@@ -128,22 +128,18 @@ class CharCountAdminMixin(admin.ModelAdmin):
 
 
 class VideoOrientationMixin(models.Model):
-    """Абстрактная модель для добавления поля ориентации видео."""
+    """Миксин с перечислением ориентаций и хелпером для max_length."""
 
     class VideoOrientationChoices(models.TextChoices):
-        """Выбор ориентации видео."""
-
         HORIZONTAL = 'horizontal', 'Горизонтальная'
         VERTICAL = 'vertical', 'Вертикальная'
 
-    video_orientation = models.CharField(
-        max_length=max(
-            len(value) for value, _ in VideoOrientationChoices.choices
-        ),
-        choices=VideoOrientationChoices.choices,
-        default=VideoOrientationChoices.HORIZONTAL,
-        verbose_name='Ориентация видео',
-    )
+    @classmethod
+    def video_orientation_max_length(cls) -> int:
+        """Максимальная длина значения среди choices (для max_length)."""
+        return max(
+            len(value) for value, _ in cls.VideoOrientationChoices.choices
+        )
 
     class Meta:
         abstract = True
