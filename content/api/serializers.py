@@ -412,6 +412,7 @@ class NewsDetailSerializer(serializers.ModelSerializer):
             'show_on_main',
             'full_text',
             'video_url',
+            'video_orientation',
             'directions',
             'project',
             'gallery_images',
@@ -581,6 +582,7 @@ class ArticleSerializer(serializers.ModelSerializer):
             'detailed_page',
             'link',
             'video_link',
+            'video_orientation',
             'text_blocks',
             'gallery_photos',
         )
