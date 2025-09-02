@@ -7,10 +7,14 @@
 
 from django.contrib import admin
 
+from content.mixins import (
+    InstantDeleteInlineMixin,
+    InstantDeleteSingleModelAdminMixin,
+)
 from content.models import ArticleUsefulLinks, ChapterUsefulLinks
 
 
-class ArticleUsefulLinksInline(admin.StackedInline):
+class ArticleUsefulLinksInline(InstantDeleteInlineMixin, admin.StackedInline):
     """Inline-класс для статьи Полезные ссылки."""
 
     model = ArticleUsefulLinks
@@ -19,9 +23,12 @@ class ArticleUsefulLinksInline(admin.StackedInline):
 
 
 @admin.register(ChapterUsefulLinks)
-class ChapterUsefulLinksAdmin(admin.ModelAdmin):
+class ChapterUsefulLinksAdmin(
+    InstantDeleteSingleModelAdminMixin, admin.ModelAdmin
+):
     """Админ зона разделов Полезные ссылки."""
 
+    instant_delete_model = ArticleUsefulLinks
     list_display = ('title',)
     search_fields = ('title',)
     inlines = (ArticleUsefulLinksInline,)

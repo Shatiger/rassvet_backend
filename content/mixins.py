@@ -186,7 +186,11 @@ class InstantDeleteInlineMixin:
     """Подключает кнопку 'Удалить' (через JS)."""
 
     class Media:
-        js = ('admin/js/jquery.init.js', 'custom_admin/js/instant_delete.js')
+        js = (
+            'admin/js/jquery.init.js',
+            'custom_admin/js/inline_instant_delete.js',
+        )
+        css = {'all': ('custom_admin/css/instant_delete.css',)}
 
 
 class InstantDeleteSingleModelAdminMixin:
