@@ -4,6 +4,12 @@ from typing import Optional, Type
 
 from django.contrib import admin
 from django.db import models, transaction
+from django.db.models import FileField
+from django.http import JsonResponse, HttpResponseForbidden
+from django.shortcuts import get_object_or_404
+from django.urls import path
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_protect
 
 from ordered_model.models import OrderedModel
 from rest_framework.serializers import Serializer
@@ -174,3 +180,59 @@ class SafeOrderedInlineModelAdminMixin:
                     setattr(obj, fk_name, parent)
                 obj.save()
             formset.save_m2m()
+
+
+class InstantDeleteInlineMixin:
+    """Подключает кнопку 'Удалить' (через JS)."""
+
+    class Media:
+        js = ('admin/js/jquery.init.js', 'custom_admin/js/instant_delete.js')
+
+
+class InstantDeleteSingleModelAdminMixin:
+    """Добавляет URL /inline-delete/<pk>/ на странице редактирования.
+
+    Нужно указать: instant_delete_model = <Модель инлайна>(например, Document).
+    Пермишен берётся автоматически: '<app>.delete_<model>'.
+    """
+
+    instant_delete_model: admin.ModelAdmin | None = None
+
+    def get_urls(self):
+        """Добавляет URL для удаления записи в общий список URL модели."""
+        return [
+            path(
+                'inline-delete/<int:pk>/',
+                self.admin_site.admin_view(self._instant_delete_view),
+                name=f'{self.model._meta.app_label}_'
+                f'{self.model._meta.model_name}_inline_delete',
+            ),
+        ] + super().get_urls()
+
+    @method_decorator(csrf_protect)
+    def _instant_delete_view(self, request, pk: int):
+        if request.method != 'POST':
+            return HttpResponseForbidden('POST required')
+
+        Model = self.instant_delete_model
+        assert (
+            Model is not None
+        ), 'Set instant_delete_model = <InlineModel> on admin'
+
+        perm = f'{Model._meta.app_label}.delete_{Model._meta.model_name}'
+        if not request.user.has_perm(perm):
+            return HttpResponseForbidden('No permission')
+
+        obj = get_object_or_404(Model, pk=pk)
+
+        for f in obj._meta.get_fields():
+            if isinstance(f, FileField):
+                file = getattr(obj, f.name, None)
+                if file and getattr(file, 'name', None):
+                    try:
+                        file.delete(save=False)
+                    except Exception:
+                        pass
+
+        obj.delete()
+        return JsonResponse({'ok': True, 'deleted': pk})
