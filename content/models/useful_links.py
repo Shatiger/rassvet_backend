@@ -15,7 +15,7 @@ class ChapterUsefulLinks(TitleMixin, models.Model):
 
     class Meta:
         verbose_name = 'Раздел'
-        verbose_name_plural = 'Полезные ссылки - разделы'
+        verbose_name_plural = 'Полезные ссылки'
         ordering = ('title',)
 
     def __str__(self):
