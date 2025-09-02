@@ -1,33 +1,26 @@
-/* Общие правки кнопки */
 .js-inline-delete-now {
   padding: 2px 10px;
   display: inline-block;
   line-height: 1.4;
 }
 
-/* --- StackedInline --- */
-/* В шапке инлайна чекбокс лежит в <span class="delete"> — выровняем всё по центру */
-/* заголовок инлайна как flex-контейнер */
 .inline-related > h3 {
   display: flex;
   align-items: center;
 }
 
-/* блок с нашей кнопкой уезжает вправо */
 .inline-related > h3 .delete {
-  margin-left: auto;           /* ← волшебная строчка */
+  margin-left: auto;
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
 
-/* --- TabularInline --- */
-/* В таблице колонка "Удалить?" — по центру */
 tr.form-row td.delete {
   text-align: right;
   vertical-align: middle;
 }
 tr.form-row td.delete .js-inline-delete-now {
-  margin: 0 auto;           /* на случай display:block */
+  margin: 0 auto;
 }
