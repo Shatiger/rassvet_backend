@@ -45,10 +45,9 @@ class TrainingAndInternships(TitleMixin, CleanEmptyHTMLMixin, OrderedModel):
     price = models.CharField(
         max_length=255,
         verbose_name='Цена',
-        blank=True,
     )
     date = models.CharField(
-        verbose_name='Дата',
+        verbose_name='Дата или сроки проведения',
         max_length=255,
     )
     format_study = models.CharField(
@@ -103,7 +102,7 @@ class TrainingAndInternships(TitleMixin, CleanEmptyHTMLMixin, OrderedModel):
             validate_not_empty_html(
                 self.text_block,
                 'Для создания подробной страницы '
-                'необходимо заполнить текстовый блок:.',
+                'необходимо заполнить текстовый блок:',
             )
         elif (
             self.action_on_button == ActionOnButton.URL_NEWS
@@ -112,7 +111,7 @@ class TrainingAndInternships(TitleMixin, CleanEmptyHTMLMixin, OrderedModel):
             raise ValidationError('Ссылка на новость не может быть пустой')
 
 
-class TrainingAndInternshipsPhoto(models.Model):
+class TrainingAndInternshipsPhoto(OrderedModel):
     """Модель Фотографий обучения и стажировок."""
 
     training = models.ForeignKey(
@@ -124,24 +123,22 @@ class TrainingAndInternshipsPhoto(models.Model):
     image = models.ImageField(
         upload_to='training/',
         verbose_name='Фотография',
+        help_text='На главной странице будет фотография, первая в списке.',
         validators=[FileExtensionValidator(IMAGE_CONTENT_TYPES)],
     )
-    on_main = models.BooleanField(
-        default=False,
-        verbose_name='На главной странице',
-    )
-    order = models.PositiveIntegerField(
-        default=0,
-        verbose_name='Порядок отображения',
-    )
+    order_with_respect_to = 'training'
 
-    class Meta:
+    class Meta(OrderedModel.Meta):
         """Класс Meta для TAIPhoto, содержащий мета-данные."""
 
         verbose_name = 'Фотография карточки обучения и стажировок'
         verbose_name_plural = 'Фотографии карточек обучения и стажировок'
-        ordering = ['order']
-        indexes = [models.Index(fields=['order'])]
+        ordering = [
+            'order',
+        ]
+        indexes = [
+            models.Index(fields=['training', 'order']),
+        ]
 
     def __str__(self):
         """Возвращает строковое представление  фотографии."""
