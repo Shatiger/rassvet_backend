@@ -37,7 +37,8 @@ class Direction(TimestampMixin, models.Model):
         'URL-слаг',
         max_length=100,
         unique=True,
-        help_text='название направления латинскими буквами с тире (URL-слаг)',
+        help_text='название направления латинскими буквами с '
+        'тире вместо пробелов (URL-слаг)',
     )
 
     class Meta:
