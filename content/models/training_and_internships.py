@@ -77,6 +77,7 @@ class TrainingAndInternships(TitleMixin, CleanEmptyHTMLMixin, OrderedModel):
         verbose_name='Ссылка на новость',
         blank=True,
         max_length=200,
+        help_text='Ссылка вводится только для новости',
     )
     clean_html_fields = ('text_block',)
 
