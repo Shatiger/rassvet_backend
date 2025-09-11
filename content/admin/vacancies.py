@@ -4,13 +4,22 @@ from django.contrib import admin
 
 from content.base_models import TopOrderedModelAdmin
 
+from content.mixins import CharCountAdminMixin
 from content.models import Vacancy
 
 
 @admin.register(Vacancy)
-class VacancyAdmin(TopOrderedModelAdmin):
+class VacancyAdmin(CharCountAdminMixin, TopOrderedModelAdmin):
     """Административная панель для управления вакансиями."""
 
+    charcount_fields = {
+        'profession': 70,
+        'salary': 70,
+        'schedule': 70,
+        'location': 70,
+        'short_description': 200,
+        'additional_description': 2500,
+    }
     list_display = [
         'profession',
         'salary',
@@ -50,7 +59,7 @@ class VacancyAdmin(TopOrderedModelAdmin):
                     'redirect_type',
                 ),
                 'description': 'Обязательные поля для карточки вакансии '
-                'на странице "Вакансии"',
+                'на странице "Специалистам"',
             },
         ),
         (
@@ -61,7 +70,8 @@ class VacancyAdmin(TopOrderedModelAdmin):
             },
         ),
         (
-            'Информация для подробной страницы "Вакансии_подробная"',
+            'Информация для подробной страницы'
+            '"Специалистам. Вакансия подробная"',
             {
                 'fields': (
                     'additional_description',
@@ -69,9 +79,9 @@ class VacancyAdmin(TopOrderedModelAdmin):
                     'external_link',
                 ),
                 'description': 'Поля заполняемые при выборе '
-                '"На страницу Вакансии_подробная". '
+                '"На страницу Специалистам. Вакансия подробная". '
                 'Если ссылка на внешнюю платформу не заполнена - '
-                'кнопка перехода на НН не появляется.',
+                'кнопка перехода на ресурс не появляется.',
             },
         ),
         (
