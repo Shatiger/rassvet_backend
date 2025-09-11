@@ -103,7 +103,7 @@ class TrainingAndInternships(TitleMixin, CleanEmptyHTMLMixin, OrderedModel):
             validate_not_empty_html(
                 self.text_block,
                 'Для создания подробной страницы '
-                'необходимо заполнить текстовый блок:',
+                'необходимо заполнить текстовый блок',
             )
         elif (
             self.action_on_button == ActionOnButton.URL_NEWS
