@@ -7,22 +7,46 @@ from ordered_model.admin import (
     OrderedInlineModelAdminMixin,
 )
 
-from content.mixins import SafeOrderedInlineModelAdminMixin
+from content.mixins import (
+    CharCountAdminMixin,
+    SafeOrderedInlineModelAdminMixin,
+)
 from content.models import News, Direction, GalleryImage, Project
 
 
-class ProjectFilter(SimpleListFilter):
+class ProjectFilterActive(SimpleListFilter):
     """Кастомный фильтр для проектов в административном интерфейсе новостей.
 
-    Обеспечивает сортировку списка проектов по алфавиту в фильтре.
+    Обеспечивает сортировку списка Действующих проектов по алфавиту в фильтре.
     """
 
-    title = 'проект'
-    parameter_name = 'project'
+    title = 'действующий проект'
+    parameter_name = 'active_project'
 
     def lookups(self, request, model_admin):
         """Возвращает список вариантов для фильтра."""
-        projects = Project.objects.all().order_by('title')
+        projects = Project.objects.filter(status='active').order_by('title')
+        return [(project.pk, project.title) for project in projects]
+
+    def queryset(self, request, queryset):
+        """Фильтрует queryset на основе выбранного значения."""
+        if self.value():
+            return queryset.filter(project=self.value())
+        return queryset
+
+
+class ProjectFilterCompleted(SimpleListFilter):
+    """Кастомный фильтр для проектов в административном интерфейсе новостей.
+
+    Обеспечивает сортировку списка Завершенных проектов по алфавиту в фильтре.
+    """
+
+    title = 'завершенный проект'
+    parameter_name = 'completed_project'
+
+    def lookups(self, request, model_admin):
+        """Возвращает список вариантов для фильтра."""
+        projects = Project.objects.filter(status='completed').order_by('title')
         return [(project.pk, project.title) for project in projects]
 
     def queryset(self, request, queryset):
@@ -49,22 +73,34 @@ class GalleryImageInline(OrderedTabularInline):
 
 @admin.register(News)
 class NewsAdmin(
+    CharCountAdminMixin,
     SafeOrderedInlineModelAdminMixin,
     OrderedInlineModelAdminMixin,
     admin.ModelAdmin,
 ):
     """Настройка административного интерфейса для модели News."""
 
+    charcount_fields = {
+        'title': 100,
+        'summary': 280,
+    }
     inlines = [GalleryImageInline]
     list_display = ('title', 'date', 'show_on_main', 'project')
     list_editable = ('date', 'show_on_main')
-    list_filter = ('date', 'show_on_main', ProjectFilter, 'detail_page_type')
+    list_filter = (
+        'date',
+        'show_on_main',
+        ProjectFilterActive,
+        ProjectFilterCompleted,
+        'directions',
+        'detail_page_type',
+    )
     search_fields = ('title', 'summary', 'full_text')
     filter_horizontal = ('directions',)
     list_select_related = ('project',)
     list_per_page = 25
     fieldsets = (
-        ('Сортировка', {'fields': ('date',)}),
+        ('Основная информация карточки новости', {'fields': ('date',)}),
         (
             None,
             {
