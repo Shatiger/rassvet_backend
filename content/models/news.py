@@ -33,7 +33,13 @@ class Direction(TimestampMixin, models.Model):
     """Модель направления деятельности, к которому может относиться новость."""
 
     name = models.CharField('Название', max_length=100, unique=True)
-    slug = models.SlugField('URL-слаг', max_length=100, unique=True)
+    slug = models.SlugField(
+        'URL-слаг',
+        max_length=100,
+        unique=True,
+        help_text='название направления латинскими буквами с '
+        'тире вместо пробелов (URL-слаг)',
+    )
 
     class Meta:
         """Мета-настройки модели Direction."""

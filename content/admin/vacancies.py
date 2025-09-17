@@ -4,18 +4,24 @@ from django.contrib import admin
 
 from content.base_models import TopOrderedModelAdmin
 
+from content.mixins import CharCountAdminMixin
 from content.models import Vacancy
 
 
 @admin.register(Vacancy)
-class VacancyAdmin(TopOrderedModelAdmin):
+class VacancyAdmin(CharCountAdminMixin, TopOrderedModelAdmin):
     """Административная панель для управления вакансиями."""
 
+    charcount_fields = {
+        'profession': 70,
+        'salary': 15,
+        'schedule': 20,
+        'short_description': 380,
+    }
     list_display = [
         'profession',
         'salary',
         'schedule',
-        'location',
         'move_up_down_links',
     ]
 
@@ -29,8 +35,6 @@ class VacancyAdmin(TopOrderedModelAdmin):
 
     search_fields = [
         'profession',
-        'short_description',
-        'location',
     ]
 
     readonly_fields = [
@@ -45,23 +49,18 @@ class VacancyAdmin(TopOrderedModelAdmin):
                 'fields': (
                     'profession',
                     'photo',
-                    'salary',
                     'short_description',
+                    'salary',
+                    'schedule',
                     'redirect_type',
                 ),
-                'description': 'Обязательные поля для карточки вакансии '
-                'на странице "Вакансии"',
+                'description': 'Поля для карточки вакансии '
+                'на странице "Специалистам"',
             },
         ),
         (
-            'Дополнительная информация карточки',
-            {
-                'fields': ('schedule', 'location'),
-                'description': 'Необязательные поля для карточки вакансии',
-            },
-        ),
-        (
-            'Информация для подробной страницы "Вакансии_подробная"',
+            'Информация для подробной страницы'
+            '"Специалистам. Вакансия подробная"',
             {
                 'fields': (
                     'additional_description',
@@ -69,9 +68,9 @@ class VacancyAdmin(TopOrderedModelAdmin):
                     'external_link',
                 ),
                 'description': 'Поля заполняемые при выборе '
-                '"На страницу Вакансии_подробная". '
+                '"На страницу "Специалистам. Вакансия подробная". '
                 'Если ссылка на внешнюю платформу не заполнена - '
-                'кнопка перехода на НН не появляется.',
+                'кнопка перехода не появляется.',
             },
         ),
         (
