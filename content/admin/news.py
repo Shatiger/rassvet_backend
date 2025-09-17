@@ -20,7 +20,7 @@ class ProjectFilterActive(SimpleListFilter):
     Обеспечивает сортировку списка Действующих проектов по алфавиту в фильтре.
     """
 
-    title = 'действующий проект'
+    title = 'Действующий проект'
     parameter_name = 'active_project'
 
     def lookups(self, request, model_admin):
@@ -41,7 +41,7 @@ class ProjectFilterCompleted(SimpleListFilter):
     Обеспечивает сортировку списка Завершенных проектов по алфавиту в фильтре.
     """
 
-    title = 'завершенный проект'
+    title = 'Завершенный проект'
     parameter_name = 'completed_project'
 
     def lookups(self, request, model_admin):
@@ -100,11 +100,11 @@ class NewsAdmin(
     list_select_related = ('project',)
     list_per_page = 25
     fieldsets = (
-        ('Основная информация карточки новости', {'fields': ('date',)}),
         (
-            None,
+            'Основная информация карточки новости',
             {
                 'fields': (
+                    'date',
                     'title',
                     'photo',
                     'course_start',
