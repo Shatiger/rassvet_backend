@@ -455,7 +455,6 @@ class VacancySerializer(serializers.ModelSerializer):
             'salary',
             'short_description',
             'schedule',
-            'location',
             'redirect_type',
             'order',
         )
