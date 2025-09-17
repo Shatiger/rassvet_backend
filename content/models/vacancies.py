@@ -22,8 +22,8 @@ class Vacancy(TimestampMixin, OrderedModel):
     """Модель вакансий."""
 
     class RedirectChoises(models.TextChoices):
-        DETAIL = 'detail', 'На страницу "Вакансии_подробная"'
-        FORM = 'form', 'На форму "Форма связи и отклика"'
+        DETAIL = 'detail', 'На подробную страницу'
+        FORM = 'form', 'На форму связи и отклика'
 
     profession = models.CharField(max_length=200, verbose_name='Профессия')
     photo = models.ImageField(
@@ -33,13 +33,10 @@ class Vacancy(TimestampMixin, OrderedModel):
     )
     salary = models.CharField(max_length=200, verbose_name='Зарплата')
     short_description = ckeditor_function(
-        verbose_name='Краткое описание вакансии',
+        verbose_name='Краткое описание',
     )
     schedule = models.CharField(
         max_length=200, blank=True, verbose_name='График'
-    )
-    location = models.CharField(
-        max_length=200, blank=True, verbose_name='Место'
     )
     redirect_type = models.CharField(
         max_length=10,
@@ -48,7 +45,7 @@ class Vacancy(TimestampMixin, OrderedModel):
         verbose_name='Тип перехода',
     )
     additional_description = ckeditor_function(
-        verbose_name='Дополнительное описание',
+        verbose_name='Дополнительное описание вакансии',
         blank=True,
         null=True,
         validators=[],
@@ -92,16 +89,14 @@ class Vacancy(TimestampMixin, OrderedModel):
             try:
                 validate_not_empty_html(
                     self.additional_description,
-                    'Обязательное поле при выборе '
-                    '"На страницу Вакансии_подробная"',
+                    'На подробную страницу',
                 )
             except ValidationError as e:
                 errors['additional_description'] = e.message
             try:
                 validate_not_empty_html(
                     self.detailed_description,
-                    'Обязательное поле при выборе '
-                    '"На страницу Вакансии_подробная"',
+                    'На подробную страницу',
                 )
             except ValidationError as e:
                 errors['detailed_description'] = e.message
