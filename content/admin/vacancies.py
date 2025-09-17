@@ -14,10 +14,9 @@ class VacancyAdmin(CharCountAdminMixin, TopOrderedModelAdmin):
 
     charcount_fields = {
         'profession': 70,
-        'salary': 70,
-        'schedule': 70,
-        'short_description': 200,
-        'additional_description': 2500,
+        'salary': 15,
+        'schedule': 20,
+        'short_description': 380,
     }
     list_display = [
         'profession',
@@ -36,7 +35,6 @@ class VacancyAdmin(CharCountAdminMixin, TopOrderedModelAdmin):
 
     search_fields = [
         'profession',
-        'short_description',
     ]
 
     readonly_fields = [
@@ -51,19 +49,13 @@ class VacancyAdmin(CharCountAdminMixin, TopOrderedModelAdmin):
                 'fields': (
                     'profession',
                     'photo',
-                    'salary',
                     'short_description',
+                    'salary',
+                    'shedule',
                     'redirect_type',
                 ),
-                'description': 'Обязательные поля для карточки вакансии '
+                'description': 'Поля для карточки вакансии '
                 'на странице "Специалистам"',
-            },
-        ),
-        (
-            'Дополнительная информация карточки',
-            {
-                'fields': ('schedule',),
-                'description': 'Необязательные поля для карточки вакансии',
             },
         ),
         (
@@ -76,9 +68,9 @@ class VacancyAdmin(CharCountAdminMixin, TopOrderedModelAdmin):
                     'external_link',
                 ),
                 'description': 'Поля заполняемые при выборе '
-                '"На страницу Специалистам. Вакансия подробная". '
+                '"На страницу "Специалистам. Вакансия подробная". '
                 'Если ссылка на внешнюю платформу не заполнена - '
-                'кнопка перехода на ресурс не появляется.',
+                'кнопка перехода не появляется.',
             },
         ),
         (
