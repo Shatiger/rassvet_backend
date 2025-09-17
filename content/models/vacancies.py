@@ -89,14 +89,16 @@ class Vacancy(TimestampMixin, OrderedModel):
             try:
                 validate_not_empty_html(
                     self.additional_description,
-                    'На подробную страницу',
+                    'Обязательное поле при выборе '
+                    'типа перехода "На подробную страницу"',
                 )
             except ValidationError as e:
                 errors['additional_description'] = e.message
             try:
                 validate_not_empty_html(
                     self.detailed_description,
-                    'На подробную страницу',
+                    'Обязательное поле при выборе '
+                    'типа перехода "На подробную страницу"',
                 )
             except ValidationError as e:
                 errors['detailed_description'] = e.message

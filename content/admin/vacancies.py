@@ -51,7 +51,7 @@ class VacancyAdmin(CharCountAdminMixin, TopOrderedModelAdmin):
                     'photo',
                     'short_description',
                     'salary',
-                    'shedule',
+                    'schedule',
                     'redirect_type',
                 ),
                 'description': 'Поля для карточки вакансии '
