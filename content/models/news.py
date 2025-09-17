@@ -110,6 +110,7 @@ class News(
     full_text = ckeditor_function(
         verbose_name='Основной текст',
         blank=True,
+        null=True,
         validators=[],
     )
     video_url = models.URLField(
