@@ -22,8 +22,8 @@ class ReportInline(OrderedTabularInline):
     """Модель администрирования документов."""
 
     model = Report
-    fields = ('title', 'file', 'download_icon', 'move_up_down_links', 'order')
-    readonly_fields = ('move_up_down_links', 'order')
+    fields = ('title', 'file', 'download_icon', 'move_up_down_links')
+    readonly_fields = ('move_up_down_links',)
     ordering = ('order',)
     extra = 1
 
