@@ -653,7 +653,7 @@ class TrainAndInternPhotoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TrainingAndInternshipsPhoto
-        fields = ('id', 'image', 'on_main', 'order')
+        fields = ('id', 'image', 'order')
 
 
 class TrainAndInternSerializer(serializers.ModelSerializer):
