@@ -16,7 +16,6 @@ class VacancyAdmin(CharCountAdminMixin, TopOrderedModelAdmin):
         'profession': 70,
         'salary': 70,
         'schedule': 70,
-        'location': 70,
         'short_description': 200,
         'additional_description': 2500,
     }
@@ -24,7 +23,6 @@ class VacancyAdmin(CharCountAdminMixin, TopOrderedModelAdmin):
         'profession',
         'salary',
         'schedule',
-        'location',
         'move_up_down_links',
     ]
 
@@ -39,7 +37,6 @@ class VacancyAdmin(CharCountAdminMixin, TopOrderedModelAdmin):
     search_fields = [
         'profession',
         'short_description',
-        'location',
     ]
 
     readonly_fields = [
@@ -65,7 +62,7 @@ class VacancyAdmin(CharCountAdminMixin, TopOrderedModelAdmin):
         (
             'Дополнительная информация карточки',
             {
-                'fields': ('schedule', 'location'),
+                'fields': ('schedule',),
                 'description': 'Необязательные поля для карточки вакансии',
             },
         ),
