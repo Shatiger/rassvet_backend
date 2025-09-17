@@ -22,8 +22,8 @@ class Vacancy(TimestampMixin, OrderedModel):
     """Модель вакансий."""
 
     class RedirectChoises(models.TextChoices):
-        DETAIL = 'detail', 'На страницу "Вакансии_подробная"'
-        FORM = 'form', 'На форму "Форма регистрации и отклика"'
+        DETAIL = 'detail', 'На подробную страницу'
+        FORM = 'form', 'На форму связи и отклика'
 
     profession = models.CharField(max_length=200, verbose_name='Профессия')
     photo = models.ImageField(
@@ -32,14 +32,11 @@ class Vacancy(TimestampMixin, OrderedModel):
         validators=[FileExtensionValidator(IMAGE_CONTENT_TYPES)],
     )
     salary = models.CharField(max_length=200, verbose_name='Зарплата')
-    short_description = models.TextField(
-        max_length=500, verbose_name='Краткий текст'
+    short_description = ckeditor_function(
+        verbose_name='Краткое описание',
     )
     schedule = models.CharField(
         max_length=200, blank=True, verbose_name='График'
-    )
-    location = models.CharField(
-        max_length=200, blank=True, verbose_name='Место'
     )
     redirect_type = models.CharField(
         max_length=10,
@@ -48,12 +45,16 @@ class Vacancy(TimestampMixin, OrderedModel):
         verbose_name='Тип перехода',
     )
     additional_description = ckeditor_function(
-        verbose_name='Дополнительное описание',
+        verbose_name='Дополнительное описание вакансии',
         blank=True,
+        null=True,
         validators=[],
     )
     detailed_description = ckeditor_function(
-        verbose_name='Описание вакансии', blank=True, validators=[]
+        verbose_name='Полное описание вакансии',
+        blank=True,
+        null=True,
+        validators=[],
     )
     external_link = models.URLField(
         blank=True, verbose_name='Ссылка на внешнюю платформу'
@@ -89,7 +90,7 @@ class Vacancy(TimestampMixin, OrderedModel):
                 validate_not_empty_html(
                     self.additional_description,
                     'Обязательное поле при выборе '
-                    '"На страницу Вакансии_подробная"',
+                    'типа перехода "На подробную страницу"',
                 )
             except ValidationError as e:
                 errors['additional_description'] = e.message
@@ -97,7 +98,7 @@ class Vacancy(TimestampMixin, OrderedModel):
                 validate_not_empty_html(
                     self.detailed_description,
                     'Обязательное поле при выборе '
-                    '"На страницу Вакансии_подробная"',
+                    'типа перехода "На подробную страницу"',
                 )
             except ValidationError as e:
                 errors['detailed_description'] = e.message
