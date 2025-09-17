@@ -29,8 +29,8 @@ class FormatStudy(models.TextChoices):
 class ActionOnButton(models.TextChoices):
     """Действие кнопки."""
 
-    DETAIL = 'detail', 'Подробная страница'
-    REGISTRATION = 'registration', 'Форма регистрации и отклика'
+    DETAIL = 'detail', 'На подробную страницу'
+    FORM = 'form', 'На форму связи и отклика'
     URL_NEWS = 'url', 'Ссылка на новость'
 
 
@@ -38,7 +38,7 @@ class TrainingAndInternships(TitleMixin, CleanEmptyHTMLMixin, OrderedModel):
     """Модель обучения и стажировки."""
 
     add_info = models.CharField(
-        max_length=25,
+        max_length=30,
         verbose_name='Дополнительная информация',
         blank=True,
     )
@@ -64,19 +64,19 @@ class TrainingAndInternships(TitleMixin, CleanEmptyHTMLMixin, OrderedModel):
     short_description = models.TextField(verbose_name='Краткое описание')
     text_block = ckeditor_function(
         blank=True,
-        verbose_name='Текстовый блок',
+        verbose_name='Полное описание',
         validators=[],
     )
     action_on_button = models.CharField(
         max_length=max(len(value) for value, _ in ActionOnButton.choices),
         choices=ActionOnButton.choices,
         default=ActionOnButton.DETAIL,
-        verbose_name='Действие на кнопке',
+        verbose_name='Тип перехода',
     )
     linked_news = models.URLField(
         verbose_name='Ссылка на новость',
         blank=True,
-        max_length=200,
+        max_length=500,
         help_text='Ссылка вводится только для новости',
     )
     clean_html_fields = ('text_block',)
