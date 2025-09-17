@@ -49,6 +49,7 @@ class TrainingAndInternshipsAdmin(
         'short_description': 380,
         'price': 15,
         'date': 20,
+        'add_info': 30,
     }
     list_display = [
         'title',
@@ -56,25 +57,35 @@ class TrainingAndInternshipsAdmin(
         'price',
         'move_up_down_links',
     ]
-    inlines = [TrainingAndInternshipsPhotoInline]
     fieldsets = (
         (
-            'Основные данные',
+            'Основная информация карточки обучения и стажировок',
             {
                 'fields': (
                     'title',
+                    'add_info',
                     'short_description',
                     'price',
-                    'format_study',
                     'date',
+                    'format_study',
                     'action_on_button',
                     'linked_news',
-                    'location',
-                    'text_block',
-                )
+                ),
+                'description': 'Поля для карточки Обучения и стажировок на '
+                'странице "Специалистам"',
+            },
+        ),
+        (
+            'Информация для подробной страницы "Специалистам. Обучение '
+            'подробная"',
+            {
+                'fields': ('location', 'text_block'),
+                'description': 'Поля заполняемые при выборе типа перехода '
+                '"Подробная страница"',
             },
         ),
     )
+    inlines = [TrainingAndInternshipsPhotoInline]
 
     def get_queryset(self, request):
         """Возвращает queryset с предзагруженными зависимостями."""
