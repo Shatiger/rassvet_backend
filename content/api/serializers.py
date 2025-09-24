@@ -154,6 +154,7 @@ class TargetedFundraisingListSerializer(serializers.ModelSerializer):
             'main_photo',
             'created_at',
             'updated_at',
+            'order',
         )
 
     @extend_schema_field(FundraisingPhotoSerializer(allow_null=True))
@@ -204,6 +205,7 @@ class EmployeeSerializer(serializers.ModelSerializer):
             'image',
             'main_specialities',
             'order',
+            'category_on_main',
             'created_at',
             'updated_at',
         )
@@ -250,6 +252,7 @@ class EmployeeDetailSerializer(serializers.ModelSerializer):
             'interviews',
             'specialists_register',
             'image',
+            'category_on_main',
             'main_documents',
             'category_documents',
         )
@@ -504,7 +507,6 @@ class CoachingSerializer(serializers.ModelSerializer):
             'short_text',
             'service_price',
             'date',
-            'place',
             'course_format',
             'button',
             'link_button',
@@ -644,6 +646,7 @@ class LiteratureSerializer(serializers.ModelSerializer):
             'button_type',
             'file',
             'literature_url',
+            'order',
         )
 
 

@@ -9,7 +9,6 @@
 from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
 from django.db import models
-from django.utils import timezone
 from ordered_model.models import OrderedModel
 
 from content.constants import CHAR_FIELD_LENGTH, IMAGE_CONTENT_TYPES
@@ -28,9 +27,9 @@ class Coaching(TitleMixin, OrderedModel):
     class Buttons(models.TextChoices):
         """Выбор перехода на страницу."""
 
-        ABA_THERAPY = 'aba_therapy', 'Узнать больше о АБА-терапия'
-        CONTACTS = 'contacts', 'Позвонить'
-        NEWS = 'news', 'Узнать больше о новости'
+        ABA_THERAPY = 'aba_therapy', 'на страницу "АВА-терапия"'
+        CONTACTS = 'contacts', 'на контакты'
+        NEWS = 'news', 'ссылка на новость'
 
     short_text = models.TextField(
         verbose_name='Краткий текст',
@@ -40,15 +39,9 @@ class Coaching(TitleMixin, OrderedModel):
         verbose_name='цена услуги',
         help_text='внести текст и/или цифры',
     )
-    date = models.DateField(
-        verbose_name='Дата',
-        default=timezone.now,
-        db_index=True,
-    )
-    place = models.CharField(
+    date = models.CharField(
         max_length=CHAR_FIELD_LENGTH,
-        verbose_name='место',
-        blank=True,
+        verbose_name='Дата или сроки проведения',
     )
     course_format = models.CharField(
         max_length=max(len(value) for value, _ in CourseFormatChoices.choices),
@@ -58,7 +51,8 @@ class Coaching(TitleMixin, OrderedModel):
     button = models.CharField(
         max_length=max(len(value) for value, _ in Buttons.choices),
         choices=Buttons.choices,
-        verbose_name='Кнопка',
+        default=Buttons.ABA_THERAPY,
+        verbose_name='Тип перехода',
     )
     link_button = models.URLField(
         verbose_name='Ссылка на страницу новости',
