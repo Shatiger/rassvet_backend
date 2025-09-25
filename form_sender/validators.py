@@ -22,7 +22,11 @@ def validate_phone_number(value):
 
 def validate_name_characters(value):
     """Валидация имени."""
-    pattern = r'^[a-zA-Zа-яА-я]+$'
-    if not re.match(pattern, value):
-        raise serializers.ValidationError('Имя должно состоять из букв')
+    pattern = re.compile(r'^[a-zA-Zа-яА-Я0-9 _\-\(\)\.,`]+$')
+    if not pattern.fullmatch(value):
+        raise serializers.ValidationError(
+            'Имя может содержать только буквы (латиница, кириллица), '
+            'цифры, пробел, подчёркивание, дефис, скобки, точку, '
+            'запятую и апостроф.'
+        )
     return value
