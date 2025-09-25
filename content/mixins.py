@@ -74,10 +74,10 @@ class CleanEmptyHTMLMixin:
         В остальных случаях возвращает оригинальное значение.
         """
         if raw_html is None:
-            return None
+            return ''
         cleared = raw_html.strip().replace('\xa0', '&nbsp;')
         if cleared == '<p>&nbsp;</p>':
-            return None
+            return ''
         return raw_html
 
 
