@@ -34,6 +34,7 @@ class Vacancy(TimestampMixin, OrderedModel):
     salary = models.CharField(max_length=200, verbose_name='Зарплата')
     short_description = ckeditor_function(
         verbose_name='Краткое описание',
+        help_text='Рекомендуемое количество символов - 380',
     )
     schedule = models.CharField(
         max_length=200, blank=True, verbose_name='График'
