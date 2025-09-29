@@ -39,6 +39,9 @@ class Coaching(TitleMixin, OrderedModel):
     )
     short_description = ckeditor_function(
         verbose_name='дополнительная информация (на фото)',
+        blank=True,
+        null=True,
+        validators=[],
     )
     short_text = models.TextField(
         verbose_name='Краткий текст',
