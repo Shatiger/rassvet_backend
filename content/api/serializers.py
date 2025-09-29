@@ -34,7 +34,6 @@ from content.models import (
     ChapterKnowledgeBase,
     ChapterUsefulLinks,
     Coaching,
-    CoachingPhoto,
     Direction,
     Document,
     Employee,
@@ -480,20 +479,8 @@ class VacancyDetailSerializer(serializers.ModelSerializer):
         )
 
 
-class CoachingPhotoSerializer(serializers.ModelSerializer):
-    """Сериализатор CoachingPhoto."""
-
-    class Meta:
-        """Meta класс с настройками сериализатора CoachingPhotoSerializer."""
-
-        model = CoachingPhoto
-        fields = ('image',)
-
-
 class CoachingSerializer(serializers.ModelSerializer):
     """Сериализатор Coaching."""
-
-    photos = CoachingPhotoSerializer(many=True)
 
     class Meta:
         """Meta класс с настройками сериализатора CoachingSerializer."""
@@ -503,7 +490,8 @@ class CoachingSerializer(serializers.ModelSerializer):
             'id',
             'order',
             'title',
-            'photos',
+            'photo',
+            'short_description',
             'short_text',
             'service_price',
             'date',

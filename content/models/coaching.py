@@ -13,6 +13,7 @@ from ordered_model.models import OrderedModel
 
 from content.constants import CHAR_FIELD_LENGTH, IMAGE_CONTENT_TYPES
 from content.mixins import TitleMixin
+from content.utils import ckeditor_function
 
 
 class Coaching(TitleMixin, OrderedModel):
@@ -31,6 +32,14 @@ class Coaching(TitleMixin, OrderedModel):
         CONTACTS = 'contacts', 'на контакты'
         NEWS = 'news', 'ссылка на новость'
 
+    photo = models.ImageField(
+        upload_to='coaching/photos/',
+        verbose_name='Фотография',
+        validators=[FileExtensionValidator(IMAGE_CONTENT_TYPES)],
+    )
+    short_description = ckeditor_function(
+        verbose_name='дополнительная информация (на фото)',
+    )
     short_text = models.TextField(
         verbose_name='Краткий текст',
     )
@@ -79,29 +88,3 @@ class Coaching(TitleMixin, OrderedModel):
             raise ValidationError(
                 'Ссылка вводится только для кнопки "Узнать больше о новости".'
             )
-
-
-class CoachingPhoto(models.Model):
-    """Модель Фотографий Консультаций и обучения."""
-
-    coaching = models.ForeignKey(
-        Coaching,
-        on_delete=models.CASCADE,
-        related_name='photos',
-        verbose_name='Консультации и обучение',
-    )
-    image = models.ImageField(
-        upload_to='coaching/',
-        verbose_name='Фотография',
-        validators=[FileExtensionValidator(IMAGE_CONTENT_TYPES)],
-    )
-
-    class Meta:
-        """Класс Meta для CoachingPhoto, содержащий мета-данные."""
-
-        verbose_name = 'Фотография Консультаций и обучения'
-        verbose_name_plural = 'Фотографии Консультаций и обучения'
-
-    def __str__(self):
-        """Возвращает строковое представление фотографии coaching."""
-        return f'Фотография для coaching {self.coaching.title}'

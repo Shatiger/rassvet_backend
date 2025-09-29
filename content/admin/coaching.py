@@ -9,15 +9,7 @@ from django.contrib import admin
 
 from content.base_models import TopOrderedModelAdmin
 from content.mixins import CharCountAdminMixin
-from content.models.coaching import Coaching, CoachingPhoto
-
-
-class CoachingPhotoAdmin(admin.StackedInline):
-    """Inline-класс для фотографий, прикреплённых к coaching."""
-
-    model = CoachingPhoto
-    min_num = 1
-    max_num = 3
+from content.models.coaching import Coaching
 
 
 @admin.register(Coaching)
@@ -26,6 +18,7 @@ class CoachingAdmin(CharCountAdminMixin, TopOrderedModelAdmin):
 
     charcount_fields = {
         'title': 70,
+        'short_description': 30,
         'short_text': 380,
         'service_price': 15,
         'date': 20,
@@ -42,6 +35,8 @@ class CoachingAdmin(CharCountAdminMixin, TopOrderedModelAdmin):
             {
                 'fields': (
                     'title',
+                    'photo',
+                    'short_description',
                     'short_text',
                     'service_price',
                     'course_format',
@@ -53,10 +48,4 @@ class CoachingAdmin(CharCountAdminMixin, TopOrderedModelAdmin):
     )
     list_filter = ('date',)
     search_fields = ('date',)
-    inlines = (CoachingPhotoAdmin,)
     empty_value_display = '-пусто-'
-
-    def get_queryset(self, request):
-        """Оптимизированный queryset для избежания N+1 (prefetch_related)."""
-        queryset = super().get_queryset(request)
-        return queryset.prefetch_related('photos')
