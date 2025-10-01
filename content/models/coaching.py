@@ -13,7 +13,6 @@ from ordered_model.models import OrderedModel
 
 from content.constants import CHAR_FIELD_LENGTH, IMAGE_CONTENT_TYPES
 from content.mixins import TitleMixin
-from content.utils import ckeditor_function
 
 
 class Coaching(TitleMixin, OrderedModel):
@@ -24,6 +23,7 @@ class Coaching(TitleMixin, OrderedModel):
 
         ONLINE = 'online', 'онлайн'
         OFFLINE = 'offline', 'офлайн'
+        HYBRID = 'hybrid', 'гибрид'
 
     class Buttons(models.TextChoices):
         """Выбор перехода на страницу."""
@@ -37,19 +37,17 @@ class Coaching(TitleMixin, OrderedModel):
         verbose_name='Фотография',
         validators=[FileExtensionValidator(IMAGE_CONTENT_TYPES)],
     )
-    short_description = ckeditor_function(
-        verbose_name='дополнительная информация (на фото)',
+    add_info = models.CharField(
+        max_length=30,
+        verbose_name='Дополнительная информация (на фото)',
         blank=True,
-        null=True,
-        validators=[],
     )
     short_text = models.TextField(
-        verbose_name='Краткий текст',
+        verbose_name='Краткое описание',
     )
     service_price = models.CharField(
         max_length=CHAR_FIELD_LENGTH,
-        verbose_name='цена услуги',
-        help_text='внести текст и/или цифры',
+        verbose_name='Цена услуги',
     )
     date = models.CharField(
         max_length=CHAR_FIELD_LENGTH,
@@ -58,7 +56,7 @@ class Coaching(TitleMixin, OrderedModel):
     course_format = models.CharField(
         max_length=max(len(value) for value, _ in CourseFormatChoices.choices),
         choices=CourseFormatChoices.choices,
-        verbose_name='формат курса',
+        verbose_name='Формат курса',
     )
     button = models.CharField(
         max_length=max(len(value) for value, _ in Buttons.choices),
@@ -85,9 +83,5 @@ class Coaching(TitleMixin, OrderedModel):
 
     def clean(self):
         """Валидация поля link_button в зависмисти от выбора в поле button."""
-        if self.button == 'news' and self.link_button is None:
+        if self.button == 'news' and not self.link_button:
             raise ValidationError('Укажите ссылку на страницу новости.')
-        if self.button in ['aba_therapy', 'contacts'] and self.link_button:
-            raise ValidationError(
-                'Ссылка вводится только для кнопки "Узнать больше о новости".'
-            )
