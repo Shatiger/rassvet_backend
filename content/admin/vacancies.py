@@ -16,7 +16,6 @@ class VacancyAdmin(CharCountAdminMixin, TopOrderedModelAdmin):
         'profession': 70,
         'salary': 15,
         'schedule': 20,
-        'short_description': 380,
     }
     list_display = [
         'profession',
@@ -67,14 +66,10 @@ class VacancyAdmin(CharCountAdminMixin, TopOrderedModelAdmin):
                     'detailed_description',
                     'external_link',
                 ),
-                'description': 'Поля заполняемые при выборе '
-                '"На страницу "Специалистам. Вакансия подробная". '
+                'description': 'Поля заполняемые при выборе типа перехода '
+                '"На подробную страницу". '
                 'Если ссылка на внешнюю платформу не заполнена - '
                 'кнопка перехода не появляется.',
             },
-        ),
-        (
-            'Служебная информация',
-            {'fields': ('created_at', 'updated_at'), 'classes': ['collapse']},
         ),
     )

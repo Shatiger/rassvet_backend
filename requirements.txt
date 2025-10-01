@@ -3,6 +3,7 @@ django-ckeditor-5==0.2.17
 django-cors-headers==4.7.0
 django-filter==25.1
 django-ordered-model==3.7.4
+django-redis==6.0.0
 django_debug_toolbar==3.8.1
 djangorestframework==3.15.2
 drf-spectacular==0.28.0
@@ -11,4 +12,5 @@ openpyxl==3.1.5
 pandas==2.2.3
 Pillow==11.1.0
 psycopg2-binary==2.9.10
+redis==6.4.0
 requests==2.32.3
