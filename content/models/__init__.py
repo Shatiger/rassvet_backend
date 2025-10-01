@@ -15,7 +15,7 @@
 """
 
 from .about_us_video import AboutUsVideo
-from .coaching import Coaching, CoachingPhoto
+from .coaching import Coaching
 from .employees import Document, Employee, TypeDocument
 from .gratitudes import Gratitude
 from .knowledge_base import (
@@ -54,7 +54,6 @@ __all__ = [
     'ChapterKnowledgeBase',
     'ChapterUsefulLinks',
     'Coaching',
-    'CoachingPhoto',
     'Chapter',
     'Direction',
     'Document',

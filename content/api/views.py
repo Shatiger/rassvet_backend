@@ -354,9 +354,7 @@ class ReportViewSet(viewsets.ReadOnlyModelViewSet):
 class CoachingViewSet(viewsets.ReadOnlyModelViewSet):
     """Получить список "Консультация и обучение", или конкретный по его ID."""
 
-    queryset = Coaching.objects.prefetch_related(
-        'photos',
-    ).all()
+    queryset = Coaching.objects.all()
     serializer_class = serializers.CoachingSerializer
 
 
