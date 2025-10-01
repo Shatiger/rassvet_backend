@@ -256,6 +256,13 @@ class EmployeeDetailSerializer(serializers.ModelSerializer):
             'category_documents',
         )
 
+    def to_representation(self, instance):
+        """Не включает категории в ответ, если category_on_main=False."""
+        data = super().to_representation(instance)
+        if not getattr(instance, 'category_on_main', False):
+            data.pop('category_documents', None)
+        return data
+
     @extend_schema_field(list[dict])
     def get_main_documents(self, obj) -> list[dict]:
         """Возвращает список документов сотрудника отображаемых в ленте."""
@@ -269,20 +276,21 @@ class EmployeeDetailSerializer(serializers.ModelSerializer):
     @extend_schema_field(list[dict])
     def get_category_documents(self, obj) -> list[dict]:
         """Возвращает документы, сгруппированные по категориям."""
+        if not getattr(obj, 'category_on_main', False):
+            return []
         docs = getattr(obj, 'prefetched_documents', None)
         if docs is None:
             docs = Document.objects.filter(employee=obj).select_related('type')
-        categories = {}
+        categories: dict = {}
         for doc in docs:
-            if doc.type is not None:
-                cat_id = doc.type.id
-                if cat_id not in categories:
-                    categories[cat_id] = {
-                        'id': doc.type.id,
-                        'name': doc.type.name,
-                        'documents': [],
-                    }
-                categories[cat_id]['documents'].append(doc)
+            if doc.type is None:
+                continue
+            cat_id = doc.type_id
+            bucket = categories.setdefault(
+                cat_id,
+                {'id': doc.type_id, 'name': doc.type.name, 'documents': []},
+            )
+            bucket['documents'].append(doc)
         return CategorySerializer(
             categories.values(), many=True, context=self.context
         ).data
