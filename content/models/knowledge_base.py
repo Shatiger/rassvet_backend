@@ -47,7 +47,8 @@ class Article(TitleMixin, models.Model):
 
     chapter = models.ForeignKey(
         ChapterKnowledgeBase,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
+        null=True,
         related_name='articles',
         verbose_name='Раздел Базы знаний',
     )
@@ -59,17 +60,6 @@ class Article(TitleMixin, models.Model):
     link = models.URLField(
         verbose_name='Ссылка на существующую страницу',
         blank=True,
-    )
-    video_link = models.URLField(
-        verbose_name='Ссылка на видео',
-        blank=True,
-    )
-    video_orientation = models.CharField(
-        max_length=VideoOrientationMixin.video_orientation_max_length(),
-        choices=VideoOrientationMixin.VideoOrientationChoices.choices,
-        default=VideoOrientationMixin.VideoOrientationChoices.HORIZONTAL,
-        blank=True,
-        verbose_name='Ориентация видео',
     )
 
     class Meta:
@@ -87,8 +77,6 @@ class Article(TitleMixin, models.Model):
         """Валидация поля link в зависмисти от выбора в поле detailed_page."""
         if self.detailed_page == 'link' and self.link == '':
             raise ValidationError('Заполни "Ссылка на существующую страницу".')
-        if self.video_link and not self.video_orientation:
-            raise ValidationError('Укажите ориентацию видео.')
 
 
 class ArticleTextBlock(models.Model):
@@ -100,7 +88,12 @@ class ArticleTextBlock(models.Model):
         related_name='text_blocks',
         verbose_name='статья',
     )
-    text = ckeditor_function(verbose_name='текст статьи')
+    text = ckeditor_function(
+        verbose_name='текст статьи',
+        blank=True,
+        null=True,
+        validators=[],
+    )
     foto = models.ImageField(
         upload_to=upload_file,
         verbose_name='Фотография',
@@ -138,8 +131,45 @@ class ArticleGallery(models.Model):
         """Класс Meta для ArticleTextBlock, содержащий мета-данные."""
 
         verbose_name = 'Фото статьи Базы знаний'
-        verbose_name_plural = 'Галерея фотграфий статьи Базы знаний'
+        verbose_name_plural = 'Галерея фотографий статьи Базы знаний'
 
     def __str__(self):
         """Возвращает строковое представление статьи текстового блока."""
         return f'Фотография для проекта {self.article.title}'
+
+
+class ArticleVideoLink(models.Model):
+    """Ссылка на видео статьи Базы знаний."""
+
+    article = models.ForeignKey(
+        Article,
+        on_delete=models.CASCADE,
+        related_name='video_links',
+        verbose_name='видео',
+    )
+    video_link = models.URLField(
+        verbose_name='Ссылка на видео',
+        blank=True,
+    )
+    video_orientation = models.CharField(
+        max_length=VideoOrientationMixin.video_orientation_max_length(),
+        choices=VideoOrientationMixin.VideoOrientationChoices.choices,
+        default=VideoOrientationMixin.VideoOrientationChoices.HORIZONTAL,
+        blank=True,
+        verbose_name='Ориентация видео',
+    )
+
+    class Meta:
+        """Класс Meta для ArticleVideoLink, содержащий мета-данные."""
+
+        verbose_name = 'Ссылка на видео статьи Базы знаний'
+        verbose_name_plural = 'Ссылки на видео статьи Базы знаний'
+
+    def __str__(self):
+        """Возвращает строковое представление статьи текстового блока."""
+        return f'Фотография для проекта {self.article.title}'
+
+    def clean(self):
+        """Валидация поля video_orientation."""
+        if self.video_link and not self.video_orientation:
+            raise ValidationError('Укажите ориентацию видео.')

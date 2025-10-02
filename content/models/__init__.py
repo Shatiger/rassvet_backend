@@ -22,6 +22,7 @@ from .knowledge_base import (
     Article,
     ArticleGallery,
     ArticleTextBlock,
+    ArticleVideoLink,
     ChapterKnowledgeBase,
 )
 from .literatures import Literature
@@ -50,6 +51,7 @@ __all__ = [
     'Article',
     'ArticleGallery',
     'ArticleTextBlock',
+    'ArticleVideoLink',
     'ArticleUsefulLinks',
     'ChapterKnowledgeBase',
     'ChapterUsefulLinks',

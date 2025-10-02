@@ -448,6 +448,7 @@ class ArticleViewSet(viewsets.ReadOnlyModelViewSet):
         Article.objects.select_related('chapter')
         .prefetch_related(
             'gallery_photos',
+            'video_links',
             'text_blocks',
         )
         .all()
