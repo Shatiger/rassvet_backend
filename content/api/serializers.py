@@ -499,7 +499,7 @@ class CoachingSerializer(serializers.ModelSerializer):
             'order',
             'title',
             'photo',
-            'short_description',
+            'add_info',
             'short_text',
             'service_price',
             'date',
