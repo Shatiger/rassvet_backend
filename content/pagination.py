@@ -37,17 +37,20 @@ class LiteraturePageNumberPagination(PageNumberPagination):
 
     page_size = 5
     page_size_query_param = 'page_size'
-    max_page_size = 100
+    max_page_size = 1000
 
     def get_paginated_response(self, data):
         """Генерирует ответ с пагинацией и дополнительными полями."""
+        page_size_applied = getattr(
+            self.page.paginator, 'per_page', self.page_size
+        )
         return Response(
             OrderedDict(
                 [
                     ('count', self.page.paginator.count),
                     ('total_pages', self.page.paginator.num_pages),
                     ('current_page', self.page.number),
-                    ('page_size', self.get_page_size(self.request)),
+                    ('page_size', page_size_applied),
                     ('next', self.get_next_link()),
                     ('previous', self.get_previous_link()),
                     ('results', data),
