@@ -107,9 +107,9 @@ class ArticleTextBlock(models.Model):
         verbose_name = 'Текстовый блок статьи Базы знаний'
         verbose_name_plural = 'Текстовые блоки статьи Базы знаний'
 
-    # def __str__(self):
-    #     """Возвращает строковое представление статьи текстового блока."""
-    #     return f'Текстовый блок для проекта {self.article.title}'
+    def __str__(self):
+        """Возвращает строковое представление статьи текстового блока."""
+        return 'Текстовый блок'
 
 
 class ArticleGallery(models.Model):
@@ -133,9 +133,9 @@ class ArticleGallery(models.Model):
         verbose_name = 'Фото статьи Базы знаний'
         verbose_name_plural = 'Галерея фотографий статьи Базы знаний'
 
-    # def __str__(self):
-    #     """Возвращает строковое представление статьи текстового блока."""
-    #     return f'Фотография для проекта {self.article.title}'
+    def __str__(self):
+        """Возвращает строковое представление статьи текстового блока."""
+        return 'Фотография'
 
 
 class ArticleVideoLink(models.Model):
@@ -165,9 +165,9 @@ class ArticleVideoLink(models.Model):
         verbose_name = 'Ссылка на видео статьи Базы знаний'
         verbose_name_plural = 'Ссылки на видео статьи Базы знаний'
 
-    # def __str__(self):
-    #     """Возвращает строковое представление статьи текстового блока."""
-    #     return f'Ссылка на видео для проекта {self.article.title}'
+    def __str__(self):
+        """Возвращает строковое представление статьи текстового блока."""
+        return 'Ссылка на видео'
 
     def clean(self):
         """Валидация поля video_orientation."""
