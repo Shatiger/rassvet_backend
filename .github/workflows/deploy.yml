@@ -19,12 +19,9 @@ jobs:
         script: |
           set -euo pipefail
           cd /var/www/rassvet_app/rassvet_backend
-
           git fetch origin dev
           git reset --hard origin/dev
-
-          docker compose -f docker-compose.dev.yml build --pull --parallel backend frontend
-
-          docker compose -f docker-compose.dev.yml up -d --no-deps backend frontend
-
+          cd ../
+          docker compose build --pull --parallel backend frontend
+          docker compose up -d --no-deps backend frontend
           docker image prune -f --filter "until=168h" || true
