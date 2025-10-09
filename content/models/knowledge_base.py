@@ -12,8 +12,13 @@ from django.core.validators import FileExtensionValidator
 from django.db import models
 
 from content.constants import IMAGE_CONTENT_TYPES
-from content.mixins import TitleMixin, VideoOrientationMixin
+from content.mixins import (
+    CleanEmptyHTMLMixin,
+    TitleMixin,
+    VideoOrientationMixin,
+)
 from content.utils import ckeditor_function
+from content.validators import validate_not_empty_html
 
 
 def upload_file(instance, filename):
@@ -74,12 +79,12 @@ class Article(TitleMixin, models.Model):
         return self.title
 
     def clean(self):
-        """Валидация поля link в зависмисти от выбора в поле detailed_page."""
+        """Валидация поля link в зависимости от выбора в поле detailed_page."""
         if self.detailed_page == 'link' and self.link == '':
             raise ValidationError('Заполни "Ссылка на существующую страницу".')
 
 
-class ArticleTextBlock(models.Model):
+class ArticleTextBlock(CleanEmptyHTMLMixin, models.Model):
     """Текстовый блок статьи Базы знаний."""
 
     article = models.ForeignKey(
@@ -100,6 +105,7 @@ class ArticleTextBlock(models.Model):
         validators=[FileExtensionValidator(IMAGE_CONTENT_TYPES)],
         blank=True,
     )
+    clean_html_fields = ('text',)
 
     class Meta:
         """Класс Meta для ArticleTextBlock, содержащий мета-данные."""
@@ -110,6 +116,20 @@ class ArticleTextBlock(models.Model):
     def __str__(self):
         """Возвращает строковое представление статьи текстового блока."""
         return 'Текстовый блок'
+
+    def clean(self):
+        """Валидация поля text в зависимости от выбора в поле detailed_page."""
+        super().clean()
+        if (
+            hasattr(self, 'article')
+            and self.article
+            and self.article.detailed_page == 'detailed'
+        ):
+            validate_not_empty_html(
+                self.text,
+                'Текстовый блок должен содержать текст при выборе '
+                '"База знаний подробная"',
+            )
 
 
 class ArticleGallery(models.Model):
