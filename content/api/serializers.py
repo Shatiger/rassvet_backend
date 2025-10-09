@@ -29,6 +29,7 @@ from content.models import (
     Article,
     ArticleGallery,
     ArticleTextBlock,
+    ArticleVideoLink,
     ArticleUsefulLinks,
     Chapter,
     ChapterKnowledgeBase,
@@ -546,6 +547,20 @@ class ArticleTextBlockSerializer(serializers.ModelSerializer):
         )
 
 
+class ArticleVideoLinkSerializer(serializers.ModelSerializer):
+    """Сериализатор ArticleVideoLink."""
+
+    class Meta:
+        """Meta класс с настройками сериализатор ArticleVideoLinkSerializer."""
+
+        model = ArticleVideoLink
+        fields = (
+            'id',
+            'video_link',
+            'video_orientation',
+        )
+
+
 class ArticleMiniSerializer(serializers.ModelSerializer):
     """Сериализатор ArticleMini."""
 
@@ -561,12 +576,26 @@ class ArticleMiniSerializer(serializers.ModelSerializer):
         )
 
 
+class ChapterKnowledgeBaseMiniSerializer(serializers.ModelSerializer):
+    """Сериализатор ChapterKnowledgeBaseMiniSerializer."""
+
+    class Meta:
+        """Meta класс с настройками сериализатора."""
+
+        model = ChapterKnowledgeBase
+        fields = (
+            'id',
+            'title',
+        )
+
+
 class ArticleSerializer(serializers.ModelSerializer):
     """Сериализатор Article."""
 
-    chapter = serializers.CharField(source='chapter.title')
+    chapter = ChapterKnowledgeBaseMiniSerializer()
     gallery_photos = ArticleGallerySerializer(many=True)
     text_blocks = ArticleTextBlockSerializer(many=True)
+    video_links = ArticleVideoLinkSerializer(many=True)
 
     class Meta:
         """Meta класс с настройками сериализатор ArticleSerializer."""
@@ -578,8 +607,7 @@ class ArticleSerializer(serializers.ModelSerializer):
             'chapter',
             'detailed_page',
             'link',
-            'video_link',
-            'video_orientation',
+            'video_links',
             'text_blocks',
             'gallery_photos',
         )
