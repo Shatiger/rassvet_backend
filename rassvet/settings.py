@@ -335,3 +335,12 @@ CKEDITOR_5_CONFIGS = {
 }
 CKEDITOR_5_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 CKEDITOR_5_UPLOAD_PATH = 'uploads/ckeditor5/'
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+SESSION_CACHE_ALIAS = 'default'
+SESSION_COOKIE_AGE = 1209600
+SESSION_SAVE_EVERY_REQUEST = False
+SESSION_COOKIE_SECURE = not DEBUG
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_NAME = 'rassvet_sessionid'

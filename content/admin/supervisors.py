@@ -4,8 +4,10 @@ from content.base_models import TopOrderedModelAdmin
 from content.mixins import CharCountAdminMixin
 from content.models.supervisors import Supervisor
 
+from .site import admin_site
 
-@admin.register(Supervisor)
+
+@admin.register(Supervisor, site=admin_site)
 class SupervisorAdmin(CharCountAdminMixin, TopOrderedModelAdmin):
     """Модель администрирования супервизоров."""
 

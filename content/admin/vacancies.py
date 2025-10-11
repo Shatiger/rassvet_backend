@@ -7,8 +7,10 @@ from content.base_models import TopOrderedModelAdmin
 from content.mixins import CharCountAdminMixin
 from content.models import Vacancy
 
+from .site import admin_site
 
-@admin.register(Vacancy)
+
+@admin.register(Vacancy, site=admin_site)
 class VacancyAdmin(CharCountAdminMixin, TopOrderedModelAdmin):
     """Административная панель для управления вакансиями."""
 

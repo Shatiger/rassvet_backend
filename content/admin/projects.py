@@ -13,8 +13,10 @@ from content.base_models import TopOrderedModelAdmin
 from content.mixins import CharCountAdminMixin
 from content.models.projects import ProgramsProjects, Project, ProjectPhoto
 
+from .site import admin_site
 
-@admin.register(ProgramsProjects)
+
+@admin.register(ProgramsProjects, site=admin_site)
 class ProgramsProjectsAdmin(admin.ModelAdmin):
     """Админ зона Программ."""
 
@@ -34,7 +36,7 @@ class ProjectPhotoAdmin(admin.StackedInline):
     max_num = 3
 
 
-@admin.register(Project)
+@admin.register(Project, site=admin_site)
 class ProjectAdmin(CharCountAdminMixin, TopOrderedModelAdmin):
     """Админ зона Проектов."""
 

@@ -11,8 +11,10 @@ from content.base_models import TopOrderedModelAdmin
 from content.mixins import CharCountAdminMixin
 from content.models import Partner
 
+from .site import admin_site
 
-@admin.register(Partner)
+
+@admin.register(Partner, site=admin_site)
 class PartnersAdmin(CharCountAdminMixin, TopOrderedModelAdmin):
     """Настройка отображения списка Partner с предпросмотром логотипа."""
 
