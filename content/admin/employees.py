@@ -12,8 +12,10 @@ from content.base_models import SafeOrderedModelAdmin
 from content.mixins import CharCountAdminMixin
 from content.models import Document, Employee, TypeDocument
 
+from .site import admin_site
 
-@admin.register(TypeDocument)
+
+@admin.register(TypeDocument, site=admin_site)
 class TypeDocumentInline(CharCountAdminMixin, admin.ModelAdmin):
     """Настройка отображения модели TypeDocument в админке."""
 
@@ -44,7 +46,7 @@ class DocumentInline(admin.TabularInline):
         return qs.select_related('type')
 
 
-@admin.register(Employee)
+@admin.register(Employee, site=admin_site)
 class EmployeeAdmin(CharCountAdminMixin, SafeOrderedModelAdmin):
     """Конфигурация админки для модели Employee.
 

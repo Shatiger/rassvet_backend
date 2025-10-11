@@ -18,6 +18,8 @@ from content.models.training_and_internships import (
     TrainingAndInternshipsPhoto,
 )
 
+from .site import admin_site
+
 
 class TrainingAndInternshipsPhotoInline(OrderedTabularInline):
     """Inline-класс для фотографий."""
@@ -36,7 +38,7 @@ class TrainingAndInternshipsPhotoInline(OrderedTabularInline):
     validation_error_message = 'Должна быть как минимум одна фотография.'
 
 
-@admin.register(TrainingAndInternships)
+@admin.register(TrainingAndInternships, site=admin_site)
 class TrainingAndInternshipsAdmin(
     CharCountAdminMixin,
     OrderedInlineModelAdminMixin,

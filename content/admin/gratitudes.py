@@ -10,8 +10,10 @@ from content.base_models import TopOrderedModelAdmin
 from content.constants import EMPTY_VALUE_DISPLAY
 from content.models import Gratitude
 
+from .site import admin_site
 
-@admin.register(Gratitude)
+
+@admin.register(Gratitude, site=admin_site)
 class GratitudeAdmin(TopOrderedModelAdmin):
     """Настройка отображения списка Gratitude и форм редактирования.
 

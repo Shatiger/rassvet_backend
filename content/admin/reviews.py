@@ -10,8 +10,10 @@ from content.base_models import TopOrderedModelAdmin
 from content.mixins import CharCountAdminMixin
 from content.models import Review
 
+from .site import admin_site
 
-@admin.register(Review)
+
+@admin.register(Review, site=admin_site)
 class ReviewAdmin(CharCountAdminMixin, TopOrderedModelAdmin):
     """Настройка отображения списка Review и форм редактирования.
 

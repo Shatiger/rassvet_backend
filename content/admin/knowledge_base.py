@@ -17,8 +17,10 @@ from content.models import (
     ChapterKnowledgeBase,
 )
 
+from .site import admin_site
 
-@admin.register(ChapterKnowledgeBase)
+
+@admin.register(ChapterKnowledgeBase, site=admin_site)
 class ChapterKnowledgeBaseAdmin(admin.ModelAdmin):
     """Админ зона разделов Базы знаний."""
 
@@ -58,7 +60,7 @@ class ArticleVideoLinkAdmin(admin.StackedInline):
     max_num = 255
 
 
-@admin.register(Article)
+@admin.register(Article, site=admin_site)
 class ArticleAdmin(admin.ModelAdmin):
     """Админ зона статьи Базы знаний."""
 

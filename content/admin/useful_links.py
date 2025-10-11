@@ -13,6 +13,8 @@ from content.mixins import (
 )
 from content.models import ArticleUsefulLinks, ChapterUsefulLinks
 
+from .site import admin_site
+
 
 class ArticleUsefulLinksInline(InstantDeleteInlineMixin, admin.StackedInline):
     """Inline-класс для статьи Полезные ссылки."""
@@ -22,7 +24,7 @@ class ArticleUsefulLinksInline(InstantDeleteInlineMixin, admin.StackedInline):
     show_change_link = True
 
 
-@admin.register(ChapterUsefulLinks)
+@admin.register(ChapterUsefulLinks, site=admin_site)
 class ChapterUsefulLinksAdmin(
     InstantDeleteSingleModelAdminMixin, admin.ModelAdmin
 ):

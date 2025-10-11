@@ -13,6 +13,8 @@ from content.mixins import (
 )
 from content.models import News, Direction, GalleryImage, Project
 
+from .site import admin_site
+
 
 class ProjectFilterActive(SimpleListFilter):
     """Кастомный фильтр для проектов в административном интерфейсе новостей.
@@ -71,7 +73,7 @@ class GalleryImageInline(OrderedTabularInline):
     max_num = 15
 
 
-@admin.register(News)
+@admin.register(News, site=admin_site)
 class NewsAdmin(
     CharCountAdminMixin,
     SafeOrderedInlineModelAdminMixin,
@@ -131,7 +133,7 @@ class NewsAdmin(
     )
 
 
-@admin.register(Direction)
+@admin.register(Direction, site=admin_site)
 class DirectionAdmin(admin.ModelAdmin):
     """Настройка административного интерфейса для модели Direction."""
 

@@ -25,6 +25,8 @@ from content.models import (
     TargetedFundraising,
 )
 
+from .site import admin_site
+
 
 def validate_forms(forms, error_detail):
     """Проверяет наличие хотя бы одной валидной формы."""
@@ -59,7 +61,7 @@ class FundraisingPhotoInline(OrderedTabularInline):
         return qs.select_related('fundraising')
 
 
-@admin.register(TargetedFundraising)
+@admin.register(TargetedFundraising, site=admin_site)
 class TargetedFundraisingAdmin(
     CharCountAdminMixin,
     SafeOrderedInlineModelAdminMixin,

@@ -11,8 +11,10 @@ from content.base_models import TopOrderedModelAdmin
 from content.mixins import CharCountAdminMixin
 from content.models.coaching import Coaching
 
+from .site import admin_site
 
-@admin.register(Coaching)
+
+@admin.register(Coaching, site=admin_site)
 class CoachingAdmin(CharCountAdminMixin, TopOrderedModelAdmin):
     """Админ зона Coaching."""
 

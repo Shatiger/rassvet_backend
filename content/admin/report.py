@@ -17,6 +17,8 @@ from content.base_models import SafeOrderedModelAdmin
 from content.mixins import SafeOrderedInlineModelAdminMixin
 from content.models.report import Report, Chapter
 
+from .site import admin_site
+
 
 class ReportInline(OrderedTabularInline):
     """Модель администрирования документов."""
@@ -28,7 +30,7 @@ class ReportInline(OrderedTabularInline):
     extra = 1
 
 
-@admin.register(Chapter)
+@admin.register(Chapter, site=admin_site)
 class ChapterAdmin(
     SafeOrderedInlineModelAdminMixin,
     OrderedInlineModelAdminMixin,
