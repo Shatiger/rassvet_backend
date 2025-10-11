@@ -24,4 +24,4 @@ jobs:
           cd ../
           sudo docker compose build --pull --parallel backend frontend
           sudo docker compose up -d --no-deps backend frontend
-          sudi docker image prune -f --filter "until=168h" || true
+          sudo docker image prune -f --filter "until=168h" || true
