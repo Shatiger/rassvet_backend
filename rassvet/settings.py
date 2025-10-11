@@ -194,7 +194,7 @@ REST_FRAMEWORK = {
         'user': '1000/day',
         'feedback': '30/hour',
     },
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',  # noqa: E501
+    'DEFAULT_PAGINATION_CLASS': 'content.pagination.BaseLimitOffsetPagination',  # noqa: E501
     'PAGE_SIZE': 100,
 }
 
