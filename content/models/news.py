@@ -142,10 +142,6 @@ class News(
         verbose_name = 'Новость'
         verbose_name_plural = 'Новости'
 
-    def __str__(self):
-        """Строковое представление направления."""
-        return f'{self.title} ({self.date})'
-
     def save(self, *args, **kwargs):
         """Сохранение объекта с предварительной валидацией."""
         self.clean()

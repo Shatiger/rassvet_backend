@@ -108,10 +108,6 @@ class Project(TitleMixin, OrderedModel):
             ),
         ]
 
-    def __str__(self):
-        """Возвращает строковое представление проекта."""
-        return self.title
-
     def save(self, *args, **kwargs):
         """Переопределяет метод сохранения для очистки HTML-контента в полях.
 

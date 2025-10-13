@@ -88,10 +88,6 @@ class TrainingAndInternships(TitleMixin, CleanEmptyHTMLMixin, OrderedModel):
         verbose_name_plural = 'Обучение и стажировки'
         ordering = ['order']
 
-    def __str__(self):
-        """Возвращает строковое представление обучения и стажировок."""
-        return self.title
-
     def save(self, *args, **kwargs):
         """Сохранение объекта с предварительной валидацией."""
         self.clean()

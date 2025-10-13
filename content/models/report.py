@@ -30,10 +30,6 @@ class Chapter(TitleMixin, OrderedModel):
         verbose_name = 'Документы и отчеты'
         verbose_name_plural = 'Документы и отчеты'
 
-    def __str__(self):
-        """Возвращает строковое представление раздела отчёта."""
-        return self.title
-
 
 class Report(TitleMixin, OrderedModel):
     """Модель для хранения информации о отчетах."""
@@ -62,7 +58,3 @@ class Report(TitleMixin, OrderedModel):
         ]
         verbose_name = 'Отчет'
         verbose_name_plural = 'Отчеты'
-
-    def __str__(self):
-        """Возвращает строковое представление отчёта."""
-        return self.title

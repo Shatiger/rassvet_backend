@@ -77,10 +77,6 @@ class Coaching(TitleMixin, OrderedModel):
         verbose_name = 'Консультация и обучение'
         verbose_name_plural = 'Консультации и обучения'
 
-    def __str__(self):
-        """Возвращает строковое представление Coaching."""
-        return self.title
-
     def clean(self):
         """Валидация поля link_button в зависмисти от выбора в поле button."""
         if self.button == 'news' and not self.link_button:

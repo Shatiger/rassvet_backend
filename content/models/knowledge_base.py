@@ -36,10 +36,6 @@ class ChapterKnowledgeBase(TitleMixin, models.Model):
         verbose_name_plural = 'База знаний - разделы'
         ordering = ('title',)
 
-    def __str__(self):
-        """Возвращает строковое представление ChapterKnowledgeBase."""
-        return self.title
-
 
 class Article(TitleMixin, models.Model):
     """Модель статьи Базы знаний."""
@@ -73,10 +69,6 @@ class Article(TitleMixin, models.Model):
         verbose_name = 'Статья'
         verbose_name_plural = 'База знаний - статьи'
         ordering = ('title',)
-
-    def __str__(self):
-        """Возвращает строковое представление Article."""
-        return self.title
 
     def clean(self):
         """Валидация поля link в зависимости от выбора в поле detailed_page."""
