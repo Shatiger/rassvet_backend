@@ -20,7 +20,7 @@ class VacancyAdmin(CharCountAdminMixin, TopOrderedModelAdmin):
         'schedule': 20,
     }
     list_display = [
-        'profession',
+        '__str__',
         'salary',
         'schedule',
         'move_up_down_links',

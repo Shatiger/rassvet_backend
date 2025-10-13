@@ -24,7 +24,7 @@ from .site import admin_site
 class ChapterKnowledgeBaseAdmin(admin.ModelAdmin):
     """Админ зона разделов Базы знаний."""
 
-    list_display = ('title',)
+    list_display = ('__str__',)
     search_fields = ('title',)
 
 
@@ -65,7 +65,7 @@ class ArticleAdmin(admin.ModelAdmin):
     """Админ зона статьи Базы знаний."""
 
     list_display = (
-        'title',
+        '__str__',
         'chapter',
     )
     list_filter = ('chapter',)

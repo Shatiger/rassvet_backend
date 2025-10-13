@@ -87,7 +87,7 @@ class NewsAdmin(
         'summary': 280,
     }
     inlines = [GalleryImageInline]
-    list_display = ('title', 'date', 'show_on_main', 'project')
+    list_display = ('__str__', 'date', 'show_on_main', 'project')
     list_editable = ('date', 'show_on_main')
     list_filter = (
         'date',
@@ -137,5 +137,5 @@ class NewsAdmin(
 class DirectionAdmin(admin.ModelAdmin):
     """Настройка административного интерфейса для модели Direction."""
 
-    list_display = ('id', 'name', 'slug')
+    list_display = ('__str__', 'slug')
     search_fields = ('name',)

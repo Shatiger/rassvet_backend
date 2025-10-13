@@ -26,7 +26,7 @@ class CoachingAdmin(CharCountAdminMixin, TopOrderedModelAdmin):
         'date': 20,
     }
     list_display = (
-        'title',
+        '__str__',
         'date',
         'service_price',
         'move_up_down_links',

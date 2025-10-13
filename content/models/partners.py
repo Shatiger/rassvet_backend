@@ -37,5 +37,7 @@ class Partner(TimestampMixin, OrderedModel):
         indexes = [models.Index(fields=['order'])]
 
     def __str__(self):
-        """Возвращает строковое представление партнёра."""
+        """Строковое представление."""
+        if len(self.name) > 50:
+            return f'{self.name[:50]}...'
         return self.name

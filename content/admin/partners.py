@@ -22,7 +22,7 @@ class PartnersAdmin(CharCountAdminMixin, TopOrderedModelAdmin):
         'name': 50,
         'description': 200,
     }
-    list_display = ('name', 'logo_preview', 'move_up_down_links')
+    list_display = ('__str__', 'logo_preview', 'move_up_down_links')
     search_fields = ('name', 'description')
     readonly_fields = ('created_at', 'updated_at', 'logo_preview')
     fieldsets = (

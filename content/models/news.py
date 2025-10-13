@@ -49,7 +49,9 @@ class Direction(TimestampMixin, models.Model):
         verbose_name_plural = 'Направления деятельности'
 
     def __str__(self):
-        """Строковое представление направления."""
+        """Строковое представление."""
+        if len(self.name) > 50:
+            return f'{self.name[:50]}...'
         return self.name
 
 

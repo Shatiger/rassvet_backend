@@ -27,7 +27,7 @@ class ProjectsStatus(models.TextChoices):
     COMPLETED = 'completed', 'Завершенный'
 
 
-class ProgramsProjects(models.Model):
+class ProgramsProjects(TitleMixin, models.Model):
     """Модель программ проектов."""
 
     title = models.CharField('Заголовок', max_length=TITLE_LENGTH, unique=True)
@@ -37,10 +37,6 @@ class ProgramsProjects(models.Model):
 
         verbose_name = 'Программа'
         verbose_name_plural = 'Программы'
-
-    def __str__(self):
-        """Возвращает строковое представление программы."""
-        return self.title
 
 
 class Project(TitleMixin, OrderedModel):

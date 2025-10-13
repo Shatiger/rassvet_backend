@@ -78,7 +78,7 @@ class TargetedFundraisingAdmin(
         'short_description': 350,
     }
     list_display = (
-        'title',
+        '__str__',
         'status',
         'fundraising_link',
         'move_up_down_links',

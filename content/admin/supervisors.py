@@ -16,7 +16,7 @@ class SupervisorAdmin(CharCountAdminMixin, TopOrderedModelAdmin):
         'position': 70,
     }
     list_display = (
-        'name',
+        '__str__',
         'position',
         'move_up_down_links',
     )

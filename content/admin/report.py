@@ -38,7 +38,7 @@ class ChapterAdmin(
 ):
     """Модель администрирования разделов отчетов."""
 
-    list_display = ('title', 'count', 'move_up_down_links')
+    list_display = ('__str__', 'count', 'move_up_down_links')
     inlines = [ReportInline]
     search_fields = ('title',)
     list_prefetch_related = ['reports']

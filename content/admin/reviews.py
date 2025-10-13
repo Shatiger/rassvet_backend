@@ -24,7 +24,7 @@ class ReviewAdmin(CharCountAdminMixin, TopOrderedModelAdmin):
         'author_name': 45,
         'content': 200,
     }
-    list_display = ('author_name', 'is_active', 'move_up_down_links')
+    list_display = ('__str__', 'is_active', 'move_up_down_links')
     list_editable = ('is_active',)
     list_filter = ('is_active', 'created_at')
     search_fields = ('content', 'author_name')
