@@ -68,7 +68,9 @@ class Vacancy(TimestampMixin, OrderedModel):
         indexes = [models.Index(fields=['order'])]
 
     def __str__(self):
-        """Возвращает строковое представление вакансии."""
+        """Строковое представление."""
+        if len(self.profession) > 50:
+            return f'{self.profession[:50]}...'
         return self.profession
 
     def save(self, *args, **kwargs):

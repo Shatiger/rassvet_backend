@@ -54,7 +54,7 @@ class TrainingAndInternshipsAdmin(
         'add_info': 30,
     }
     list_display = [
-        'title',
+        '__str__',
         'date',
         'price',
         'move_up_down_links',

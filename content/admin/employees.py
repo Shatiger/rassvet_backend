@@ -57,7 +57,7 @@ class EmployeeAdmin(CharCountAdminMixin, SafeOrderedModelAdmin):
         'name': 19,
         'main_specialities': 45,
     }
-    list_display = ('name', 'category_on_main', 'move_up_down_links')
+    list_display = ('__str__', 'category_on_main', 'move_up_down_links')
     list_editable = ('category_on_main',)
     list_filter = ('created_at', 'updated_at')
     search_fields = ('name',)

@@ -27,6 +27,12 @@ class TitleMixin(models.Model):
 
         abstract = True
 
+    def __str__(self):
+        """Строковое представление."""
+        if len(self.title) > 50:
+            return f'{self.title[:50]}...'
+        return self.title
+
 
 class TimestampMixin(models.Model):
     """Абстрактная модель для добавления временных меток."""

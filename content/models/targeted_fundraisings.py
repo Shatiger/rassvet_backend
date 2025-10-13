@@ -79,10 +79,6 @@ class TargetedFundraising(
             'order',
         ]
 
-    def __str__(self):
-        """Возвращает строковое представление адресного сбора."""
-        return self.title
-
     def save(self, *args, **kwargs):
         """Переопределяет метод сохранения для очистки HTML-контента в полях.
 

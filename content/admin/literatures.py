@@ -11,7 +11,7 @@ class LiteratureAdmin(TopOrderedModelAdmin):
     """Модель администрирования литературы."""
 
     list_display = (
-        'title',
+        '__str__',
         'author',
         'publication_year',
         'move_up_down_links',

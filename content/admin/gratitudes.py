@@ -20,7 +20,7 @@ class GratitudeAdmin(TopOrderedModelAdmin):
     Определяет отображаемые и редактируемые поля, фильтры, поиск и секции.
     """
 
-    list_display = ('title', 'is_active', 'move_up_down_links')
+    list_display = ('__str__', 'is_active', 'move_up_down_links')
     list_editable = ('is_active',)
     list_filter = ('is_active', 'created_at')
     search_fields = ('title',)

@@ -34,5 +34,7 @@ class Supervisor(TimestampMixin, OrderedModel):
         indexes = [models.Index(fields=['order'])]
 
     def __str__(self):
-        """Возвращает строковое представление супервизора."""
+        """Строковое представление."""
+        if len(self.name) > 50:
+            return f'{self.name[:50]}...'
         return self.name

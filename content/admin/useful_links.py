@@ -31,7 +31,7 @@ class ChapterUsefulLinksAdmin(
     """Админ зона разделов Полезные ссылки."""
 
     instant_delete_model = ArticleUsefulLinks
-    list_display = ('title',)
+    list_display = ('__str__',)
     search_fields = ('title',)
     inlines = (ArticleUsefulLinksInline,)
 

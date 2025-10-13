@@ -58,10 +58,6 @@ class Literature(TitleMixin, OrderedModel):
         ordering = ['order']
         indexes = [models.Index(fields=['order'])]
 
-    def __str__(self):
-        """Возвращает строковое представление литературы."""
-        return self.title
-
     def save(self, *args, **kwargs):
         """Сохранение с валидацией и очисткой пустых ckeditor полей."""
         self.full_clean()

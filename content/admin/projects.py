@@ -20,7 +20,7 @@ from .site import admin_site
 class ProgramsProjectsAdmin(admin.ModelAdmin):
     """Админ зона Программ."""
 
-    list_display = ('title',)
+    list_display = ('__str__',)
     search_fields = ('title',)
 
     def has_delete_permission(self, request, obj=None):
@@ -44,7 +44,7 @@ class ProjectAdmin(CharCountAdminMixin, TopOrderedModelAdmin):
         'title': 100,
     }
     list_display = (
-        'title',
+        '__str__',
         'program',
         'status',
         'logo_preview',
