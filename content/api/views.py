@@ -300,14 +300,15 @@ class NewsViewSet(MultiSerializerViewSetMixin, viewsets.ReadOnlyModelViewSet):
 
     def list(self, request, *args, **kwargs):
         """Возвращает список новостей с минимальным и максимальным годом."""
-        queryset = self.filter_queryset(self.get_queryset())
+        filtered_queryset = self.filter_queryset(
+            self.get_queryset()
+        ).distinct()
 
-        page = self.paginate_queryset(queryset)
+        page = self.paginate_queryset(filtered_queryset)
         serializer = self.get_serializer(page, many=True)
 
-        date_bounds = queryset.aggregate(
-            min_date=Min('date'),
-            max_date=Max('date'),
+        date_bounds = self.get_queryset().aggregate(
+            min_date=Min('date'), max_date=Max('date')
         )
         min_year = (
             date_bounds['min_date'].year if date_bounds['min_date'] else None
