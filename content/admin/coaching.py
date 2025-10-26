@@ -24,6 +24,7 @@ class CoachingAdmin(CharCountAdminMixin, TopOrderedModelAdmin):
         'short_text': 380,
         'service_price': 15,
         'date': 20,
+        'add_info': 30,
     }
     list_display = (
         '__str__',
