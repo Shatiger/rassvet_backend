@@ -39,7 +39,7 @@ LITERATURE_CONTENT_TYPES = [
 ]
 """Формат загрузки файлов для Литературы."""
 
-MIN_NEWS_REASONABLE_YEAR = 2000
+MIN_NEWS_REASONABLE_YEAR = 1900
 """Минимальная дата для фильтрации News."""
 
 MAX_NEWS_YEAR_OFFSET = 2
