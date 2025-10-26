@@ -1,7 +1,7 @@
 .char-count-hint {
-  display: block;
-  width: 100%;
-  flex: 0 0 100%;
+  display: block !important;
+  width: 100% !important;
+  flex: 0 0 100% !important;
   clear: both;
   margin-top: 4px;
   margin-bottom: 6px;
@@ -10,6 +10,18 @@
   color: #666;
 }
 
+.flex-container {
+  flex-wrap: wrap !important;
+}
+.flex-container .char-count-hint,
+.field-flex .char-count-hint,
+.field-box .char-count-hint {
+  order: 9999 !important;
+  flex: 0 0 100% !important;
+  width: 100% !important;
+  display: block !important;
+}
+
 .char-count-hint.is-invalid {
-  color: #b91c1c;
+  color: #b91c1c !important;
 }
