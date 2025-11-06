@@ -29,9 +29,7 @@ class TitleMixin(models.Model):
 
     def __str__(self):
         """Строковое представление."""
-        if len(self.title) > 50:
-            return f'{self.title[:50]}...'
-        return self.title
+        return f'{self.title[:50]}...' if len(self.title) > 50 else self.title
 
 
 class TimestampMixin(models.Model):
