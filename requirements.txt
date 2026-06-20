@@ -4,7 +4,6 @@ django-cors-headers==4.7.0
 django-filter==25.1
 django-ordered-model==3.7.4
 django-redis==6.0.0
-django_debug_toolbar==3.8.1
 djangorestframework==3.15.2
 drf-spectacular==0.28.0
 gunicorn==23.0.0
