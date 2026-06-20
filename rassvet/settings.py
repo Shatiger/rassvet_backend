@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     'content',
     'form_sender',
     'users',
-    'debug_toolbar',
     'ordered_model',
 ]
 
@@ -51,16 +50,32 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
+
+if DEBUG:
+    try:
+        import debug_toolbar  # noqa: F401
+
+        INSTALLED_APPS += ['debug_toolbar']
+        MIDDLEWARE += [
+            'debug_toolbar.middleware.DebugToolbarMiddleware'
+        ]
+    except ImportError:
+        pass
 
 INTERNAL_IPS = ALLOWED_HOSTS
 
 CORS_ALLOW_ALL_ORIGINS = (
-    os.environ.get('CORS_ALLOW_ALL_ORIGINS', 'True') == 'True'
+    os.environ.get('CORS_ALLOW_ALL_ORIGINS', str(DEBUG)) == 'True'
 )
+CORS_ALLOWED_ORIGINS = [
+    origin.strip()
+    for origin in os.environ.get('CORS_ALLOWED_ORIGINS', '').split(',')
+    if origin.strip()
+]
 CORS_ALLOW_CREDENTIALS = (
-    os.environ.get('CORS_ALLOW_CREDENTIALS', 'True') == 'True'
+    os.environ.get('CORS_ALLOW_CREDENTIALS', 'False') == 'True'
+    and not CORS_ALLOW_ALL_ORIGINS
 )
 CORS_ALLOW_METHODS = [
     'GET',
@@ -319,3 +334,38 @@ SESSION_COOKIE_SECURE = not DEBUG
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = 'Lax'
 SESSION_COOKIE_NAME = 'rassvet_sessionid'
+
+_secure_default = str(not DEBUG)
+
+CSRF_COOKIE_SECURE = (
+    os.environ.get('CSRF_COOKIE_SECURE', _secure_default) == 'True'
+)
+CSRF_COOKIE_HTTPONLY = (
+    os.environ.get('CSRF_COOKIE_HTTPONLY', 'True') == 'True'
+)
+CSRF_COOKIE_SAMESITE = os.environ.get('CSRF_COOKIE_SAMESITE', 'Lax')
+CSRF_TRUSTED_ORIGINS = [
+    origin.strip()
+    for origin in os.environ.get('CSRF_TRUSTED_ORIGINS', '').split(',')
+    if origin.strip()
+]
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = (
+    os.environ.get('SECURE_SSL_REDIRECT', _secure_default) == 'True'
+)
+
+SECURE_HSTS_SECONDS = int(
+    os.environ.get('SECURE_HSTS_SECONDS', '31536000' if not DEBUG else '0')
+)
+SECURE_HSTS_INCLUDE_SUBDOMAINS = (
+    os.environ.get('SECURE_HSTS_INCLUDE_SUBDOMAINS', _secure_default)
+    == 'True'
+)
+SECURE_HSTS_PRELOAD = (
+    os.environ.get('SECURE_HSTS_PRELOAD', _secure_default) == 'True'
+)
+
+SECURE_CONTENT_TYPE_NOSNIFF = (
+    os.environ.get('SECURE_CONTENT_TYPE_NOSNIFF', 'True') == 'True'
+)
