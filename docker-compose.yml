@@ -42,11 +42,13 @@ services:
       context: ./rassvet_frontend
       dockerfile: Dockerfile
       args:
-        YMAPS_API_KEY: ${YMAPS_API_KEY}
+        NEXT_PUBLIC_YMAPS_API_KEY: ${YMAPS_API_KEY}
+        NEXT_PUBLIC_DOMAIN: ${SITE_URL}
+        NEXT_PUBLIC_SITE_URL: ${SITE_URL}
+        NEXT_PUBLIC_API_VERSION: ${NEXT_PUBLIC_API_VERSION:-v1}
     env_file: .env
     environment:
       INTERNAL_API_URL: http://backend:8000
-      NEXT_PUBLIC_DOMAIN: ${NEXT_PUBLIC_DOMAIN:-http://localhost}
       NODE_ENV: production
     expose:
       - "3000"
@@ -56,18 +58,30 @@ services:
 
   nginx:
     image: nginx:1.28-alpine
+    environment:
+      DOMAIN: ${DOMAIN}
     ports:
       - "80:80"
       - "443:443"
     volumes:
-      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/templates:/etc/nginx/templates:ro
       - static_volume:/var/html/static:ro
       - media_volume:/var/html/media:ro
       - nginx_cache:/var/cache/nginx
+      - certbot_certs:/etc/letsencrypt:ro
+      - certbot_www:/var/www/certbot:ro
     depends_on:
       - frontend
       - backend
     restart: always
+
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - certbot_certs:/etc/letsencrypt
+      - certbot_www:/var/www/certbot
+    entrypoint: /bin/sh -c 'trap exit TERM; while :; do certbot renew --webroot -w /var/www/certbot --quiet; sleep 12h & wait $${!}; done'
+    restart: unless-stopped
 
 volumes:
   postgres_data:
@@ -75,3 +89,5 @@ volumes:
   media_volume:
   nginx_cache:
   redis_data:
+  certbot_certs:
+  certbot_www:
