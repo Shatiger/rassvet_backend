@@ -27,12 +27,8 @@ class Chapter(TitleMixin, OrderedModel):
 
         ordering = ['order']
         indexes = [models.Index(fields=['order'])]
-        verbose_name = 'Раздел отчетов'
-        verbose_name_plural = 'Разделы отчетов'
-
-    def __str__(self):
-        """Возвращает строковое представление раздела отчёта."""
-        return self.title
+        verbose_name = 'Документы и отчеты'
+        verbose_name_plural = 'Документы и отчеты'
 
 
 class Report(TitleMixin, OrderedModel):
@@ -62,7 +58,3 @@ class Report(TitleMixin, OrderedModel):
         ]
         verbose_name = 'Отчет'
         verbose_name_plural = 'Отчеты'
-
-    def __str__(self):
-        """Возвращает строковое представление отчёта."""
-        return self.title

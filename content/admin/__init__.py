@@ -1,42 +1,45 @@
 """Пакет админских классов для приложения content."""
+from . import training_and_internships
+from . import vacancies
+from . import useful_links
+from . import targeted_fundraisings
+from . import supervisors
+from . import reviews
+from . import report
+from . import projects
+from . import partners
+from . import news
+from . import literatures
+from . import mission
+from . import knowledge_base
+from . import gratitudes
+from . import employees
+from . import coaching
+from . import about_us_video
+from django.contrib.auth.models import Group
+from django.contrib.auth.admin import GroupAdmin
 
-from .about_us_video import AboutUsVideoAdmin
-from .coaching import CoachingAdmin
-from .employees import EmployeeAdmin
-from .gratitudes import GratitudeAdmin
-from .knowledge_base import ArticleAdmin, ChapterKnowledgeBaseAdmin
-from .mission import MissionAdmin
-from .literatures import Literature
-from .news import DirectionAdmin, NewsAdmin
-from .partners import PartnersAdmin
-from .projects import ProgramsProjectsAdmin, ProjectAdmin
-from .report import ChapterAdmin
-from .reviews import ReviewAdmin
-from .supervisors import SupervisorAdmin
-from .targeted_fundraisings import TargetedFundraisingAdmin
-from .useful_links import ChapterUsefulLinksAdmin
-from .vacancies import VacancyAdmin
-from .training_and_internships import TrainingAndInternshipsAdmin
+from .site import admin_site
+
+admin_site.register(Group, GroupAdmin)
+
 
 __all__ = [
-    'AboutUsVideoAdmin',
-    'ArticleAdmin',
-    'ChapterAdmin',
-    'ChapterUsefulLinksAdmin',
-    'CoachingAdmin',
-    'ChapterKnowledgeBaseAdmin',
-    'DirectionAdmin',
-    'EmployeeAdmin',
-    'GratitudeAdmin',
-    'Literature',
-    'MissionAdmin',
-    'NewsAdmin',
-    'SupervisorAdmin',
-    'PartnersAdmin',
-    'ProjectAdmin',
-    'ProgramsProjectsAdmin',
-    'ReviewAdmin',
-    'TargetedFundraisingAdmin',
-    'VacancyAdmin',
-    'TrainingAndInternshipsAdmin',
+    'training_and_internships',
+    'vacancies',
+    'useful_links',
+    'targeted_fundraisings',
+    'supervisors',
+    'reviews',
+    'report',
+    'projects',
+    'partners',
+    'news',
+    'literatures',
+    'mission',
+    'knowledge_base',
+    'gratitudes',
+    'employees',
+    'coaching',
+    'about_us_video',
 ]

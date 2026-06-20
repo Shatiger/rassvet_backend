@@ -6,19 +6,21 @@
 
 from django.contrib import admin
 
-from content.base_models import BaseOrderedModelAdmin
+from content.base_models import TopOrderedModelAdmin
 from content.constants import EMPTY_VALUE_DISPLAY
 from content.models import Gratitude
 
+from .site import admin_site
 
-@admin.register(Gratitude)
-class GratitudeAdmin(BaseOrderedModelAdmin):
+
+@admin.register(Gratitude, site=admin_site)
+class GratitudeAdmin(TopOrderedModelAdmin):
     """Настройка отображения списка Gratitude и форм редактирования.
 
     Определяет отображаемые и редактируемые поля, фильтры, поиск и секции.
     """
 
-    list_display = ('title', 'is_active', 'move_up_down_links')
+    list_display = ('__str__', 'is_active', 'move_up_down_links')
     list_editable = ('is_active',)
     list_filter = ('is_active', 'created_at')
     search_fields = ('title',)

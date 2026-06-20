@@ -200,7 +200,7 @@ class NewsProcessor:
 
     def _set_photo(self, news: News, img_url: str):
         """Устанавливает фото для новости."""
-        img = self.parser.safe_str(img_url).lstrip('/')
+        img = self.parser.safe_str(img_url).lstrip('/').strip()
         if not img:
             return
         photo_path = os.path.join(self.images_dir, img)

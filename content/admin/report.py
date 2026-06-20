@@ -9,34 +9,36 @@ from django.db.models import Count
 from django.contrib import admin
 
 from ordered_model.admin import (
-    OrderedModelAdmin,
     OrderedTabularInline,
     OrderedInlineModelAdminMixin,
 )
 
+from content.base_models import SafeOrderedModelAdmin
+from content.mixins import SafeOrderedInlineModelAdminMixin
 from content.models.report import Report, Chapter
+
+from .site import admin_site
 
 
 class ReportInline(OrderedTabularInline):
     """Модель администрирования документов."""
 
     model = Report
-    fields = (
-        'title',
-        'file',
-        'download_icon',
-        'move_up_down_links',
-    )
+    fields = ('title', 'file', 'download_icon', 'move_up_down_links')
     readonly_fields = ('move_up_down_links',)
     ordering = ('order',)
     extra = 1
 
 
-@admin.register(Chapter)
-class ChapterAdmin(OrderedInlineModelAdminMixin, OrderedModelAdmin):
+@admin.register(Chapter, site=admin_site)
+class ChapterAdmin(
+    SafeOrderedInlineModelAdminMixin,
+    OrderedInlineModelAdminMixin,
+    SafeOrderedModelAdmin,
+):
     """Модель администрирования разделов отчетов."""
 
-    list_display = ('title', 'count', 'move_up_down_links')
+    list_display = ('__str__', 'count', 'move_up_down_links')
     inlines = [ReportInline]
     search_fields = ('title',)
     list_prefetch_related = ['reports']

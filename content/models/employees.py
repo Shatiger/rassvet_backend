@@ -80,7 +80,9 @@ class Employee(TimestampMixin, OrderedModel):
         indexes = [models.Index(fields=['order'])]
 
     def __str__(self):
-        """Возвращает строковое представление объекта сотрудника."""
+        """Строковое представление."""
+        if len(self.name) > 50:
+            return f'{self.name[:50]}...'
         return self.name
 
     def save(self, *args, **kwargs):
@@ -109,7 +111,8 @@ class TypeDocument(models.Model):
     """Модель для хранения типов документов."""
 
     name = models.CharField(
-        max_length=100, verbose_name='Название типа документа'
+        max_length=100,
+        verbose_name='Название типа документа',
     )
 
     class Meta:
@@ -119,7 +122,9 @@ class TypeDocument(models.Model):
         verbose_name_plural = 'Типы документов'
 
     def __str__(self):
-        """Возвращает строковое представление типа документа."""
+        """Строковое представление."""
+        if len(self.name) > 50:
+            return f'{self.name[:50]}...'
         return self.name
 
 

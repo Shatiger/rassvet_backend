@@ -17,8 +17,12 @@ jobs:
         username: ${{ secrets.SERVER_USER }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
+          set -euo pipefail
           cd /var/www/rassvet_app/rassvet_backend
-          git pull origin dev
-          sudo docker-compose -f docker-compose.dev.yml down
-          sudo docker-compose -f docker-compose.dev.yml up -d --build
-          sudo docker system prune -af
+          git fetch origin dev
+          git reset --hard origin/dev
+          cd ../
+          sudo docker compose build --pull backend
+          sudo docker compose build --pull frontend
+          sudo docker compose up -d --no-deps backend frontend
+          sudo docker image prune -f --filter "until=168h" || true

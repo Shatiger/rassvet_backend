@@ -2,20 +2,27 @@
 
 from django.contrib import admin
 
-from content.base_models import BaseOrderedModelAdmin
+from content.base_models import TopOrderedModelAdmin
 
+from content.mixins import CharCountAdminMixin
 from content.models import Vacancy
 
+from .site import admin_site
 
-@admin.register(Vacancy)
-class VacancyAdmin(BaseOrderedModelAdmin):
+
+@admin.register(Vacancy, site=admin_site)
+class VacancyAdmin(CharCountAdminMixin, TopOrderedModelAdmin):
     """Административная панель для управления вакансиями."""
 
+    charcount_fields = {
+        'profession': 70,
+        'salary': 15,
+        'schedule': 20,
+    }
     list_display = [
-        'profession',
+        '__str__',
         'salary',
         'schedule',
-        'location',
         'move_up_down_links',
     ]
 
@@ -29,8 +36,6 @@ class VacancyAdmin(BaseOrderedModelAdmin):
 
     search_fields = [
         'profession',
-        'short_description',
-        'location',
     ]
 
     readonly_fields = [
@@ -45,37 +50,28 @@ class VacancyAdmin(BaseOrderedModelAdmin):
                 'fields': (
                     'profession',
                     'photo',
-                    'salary',
                     'short_description',
+                    'salary',
+                    'schedule',
                     'redirect_type',
                 ),
-                'description': 'Обязательные поля для карточки вакансии '
-                'на странице "Вакансии"',
+                'description': 'Поля для карточки вакансии '
+                'на странице "Специалистам"',
             },
         ),
         (
-            'Дополнительная информация карточки',
-            {
-                'fields': ('schedule', 'location'),
-                'description': 'Необязательные поля для карточки вакансии',
-            },
-        ),
-        (
-            'Информация для подробной страницы "Вакансии_подробная"',
+            'Информация для подробной страницы'
+            '"Специалистам. Вакансия подробная"',
             {
                 'fields': (
                     'additional_description',
                     'detailed_description',
                     'external_link',
                 ),
-                'description': 'Поля заполняемые при выборе '
-                '"На страницу Вакансии_подробная". '
+                'description': 'Поля заполняемые при выборе типа перехода '
+                '"На подробную страницу". '
                 'Если ссылка на внешнюю платформу не заполнена - '
-                'кнопка перехода на НН не появляется.',
+                'кнопка перехода не появляется.',
             },
-        ),
-        (
-            'Служебная информация',
-            {'fields': ('created_at', 'updated_at'), 'classes': ['collapse']},
         ),
     )

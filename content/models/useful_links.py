@@ -15,12 +15,8 @@ class ChapterUsefulLinks(TitleMixin, models.Model):
 
     class Meta:
         verbose_name = 'Раздел'
-        verbose_name_plural = 'Полезные ссылки - разделы'
+        verbose_name_plural = 'Полезные ссылки'
         ordering = ('title',)
-
-    def __str__(self):
-        """Возвращает строковое представление ChapterUsefulLinks."""
-        return self.title
 
 
 class ArticleUsefulLinks(TitleMixin, models.Model):
@@ -40,7 +36,3 @@ class ArticleUsefulLinks(TitleMixin, models.Model):
         verbose_name = 'Статья'
         verbose_name_plural = 'Полезные ссылки - статьи'
         ordering = ('title',)
-
-    def __str__(self):
-        """Возвращает строковое представление ArticleUsefulLinks."""
-        return self.title

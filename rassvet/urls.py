@@ -8,9 +8,10 @@
 
 from django.conf import settings
 from django.conf.urls.static import static
-from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import include, path
+
+from content.admin import admin_site
 
 urlpatterns = [
     path(
@@ -33,15 +34,16 @@ urlpatterns = [
         auth_views.PasswordResetCompleteView.as_view(),
         name='password_reset_complete',
     ),
-    path('admin/', admin.site.urls),
+    path('admin/', admin_site.urls),
     path('api/v1/forms/', include('form_sender.urls')),
     path('api/', include('content.urls')),
     path('ckeditor5/', include('django_ckeditor_5.urls')),
 ]
 if settings.DEBUG:
-    urlpatterns = [
-        path('__debug__/', include('debug_toolbar.urls'))
-    ] + urlpatterns
+    if 'debug_toolbar' in settings.INSTALLED_APPS:
+        urlpatterns = [
+            path('__debug__/', include('debug_toolbar.urls'))
+        ] + urlpatterns
     urlpatterns += static(
         settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
     )

@@ -15,12 +15,17 @@ from ordered_model.admin import (
     OrderedInlineModelAdminMixin,
 )
 
-from content.base_models import BaseOrderedModelAdmin
-from content.mixins import CharCountAdminMixin
+from content.base_models import TopOrderedModelAdmin
+from content.mixins import (
+    CharCountAdminMixin,
+    SafeOrderedInlineModelAdminMixin,
+)
 from content.models import (
     FundraisingPhoto,
     TargetedFundraising,
 )
+
+from .site import admin_site
 
 
 def validate_forms(forms, error_detail):
@@ -56,9 +61,12 @@ class FundraisingPhotoInline(OrderedTabularInline):
         return qs.select_related('fundraising')
 
 
-@admin.register(TargetedFundraising)
+@admin.register(TargetedFundraising, site=admin_site)
 class TargetedFundraisingAdmin(
-    CharCountAdminMixin, OrderedInlineModelAdminMixin, BaseOrderedModelAdmin
+    CharCountAdminMixin,
+    SafeOrderedInlineModelAdminMixin,
+    OrderedInlineModelAdminMixin,
+    TopOrderedModelAdmin,
 ):
     """Конфигурация админки для модели TargetedFundraising.
 
@@ -70,7 +78,7 @@ class TargetedFundraisingAdmin(
         'short_description': 350,
     }
     list_display = (
-        'title',
+        '__str__',
         'status',
         'fundraising_link',
         'move_up_down_links',

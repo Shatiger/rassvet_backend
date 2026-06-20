@@ -9,16 +9,18 @@
 from django.contrib import admin
 from django.utils.html import format_html
 
-from content.base_models import BaseOrderedModelAdmin
+from content.base_models import TopOrderedModelAdmin
 from content.mixins import CharCountAdminMixin
 from content.models.projects import ProgramsProjects, Project, ProjectPhoto
 
+from .site import admin_site
 
-@admin.register(ProgramsProjects)
+
+@admin.register(ProgramsProjects, site=admin_site)
 class ProgramsProjectsAdmin(admin.ModelAdmin):
     """Админ зона Программ."""
 
-    list_display = ('title',)
+    list_display = ('__str__',)
     search_fields = ('title',)
 
     def has_delete_permission(self, request, obj=None):
@@ -34,15 +36,15 @@ class ProjectPhotoAdmin(admin.StackedInline):
     max_num = 3
 
 
-@admin.register(Project)
-class ProjectAdmin(CharCountAdminMixin, BaseOrderedModelAdmin):
+@admin.register(Project, site=admin_site)
+class ProjectAdmin(CharCountAdminMixin, TopOrderedModelAdmin):
     """Админ зона Проектов."""
 
     charcount_fields = {
         'title': 100,
     }
     list_display = (
-        'title',
+        '__str__',
         'program',
         'status',
         'logo_preview',

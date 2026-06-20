@@ -9,9 +9,10 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
 from .models import RassvetUser
+from content.admin.site import admin_site
 
 
-@admin.register(RassvetUser)
+@admin.register(RassvetUser, site=admin_site)
 class RassvetUserAdmin(UserAdmin):
     """Административный интерфейс для модели пользователя RassvetUser."""
 

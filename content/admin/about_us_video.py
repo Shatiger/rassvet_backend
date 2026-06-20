@@ -9,8 +9,10 @@ from django.shortcuts import redirect
 
 from content.models import AboutUsVideo
 
+from .site import admin_site
 
-@admin.register(AboutUsVideo)
+
+@admin.register(AboutUsVideo, site=admin_site)
 class AboutUsVideoAdmin(admin.ModelAdmin):
     """Отображение единственного экземпляра Video в админке.
 

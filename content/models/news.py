@@ -17,6 +17,7 @@ from content.mixins import (
     CleanEmptyHTMLMixin,
     TimestampMixin,
     TitleMixin,
+    VideoOrientationMixin,
 )
 from content.validators import validate_not_empty_html
 from content.utils import ckeditor_function
@@ -32,7 +33,13 @@ class Direction(TimestampMixin, models.Model):
     """Модель направления деятельности, к которому может относиться новость."""
 
     name = models.CharField('Название', max_length=100, unique=True)
-    slug = models.SlugField('URL-слаг', max_length=100, unique=True)
+    slug = models.SlugField(
+        'URL-слаг',
+        max_length=100,
+        unique=True,
+        help_text='название направления латинскими буквами с '
+        'тире вместо пробелов (URL-слаг)',
+    )
 
     class Meta:
         """Мета-настройки модели Direction."""
@@ -42,11 +49,19 @@ class Direction(TimestampMixin, models.Model):
         verbose_name_plural = 'Направления деятельности'
 
     def __str__(self):
-        """Строковое представление направления."""
+        """Строковое представление."""
+        if len(self.name) > 50:
+            return f'{self.name[:50]}...'
         return self.name
 
 
-class News(TimestampMixin, TitleMixin, CleanEmptyHTMLMixin, models.Model):
+class News(
+    VideoOrientationMixin,
+    TimestampMixin,
+    TitleMixin,
+    CleanEmptyHTMLMixin,
+    models.Model,
+):
     """Модель новости, содержащая информацию и детализированные поля."""
 
     class DetailPageChoices(models.TextChoices):
@@ -97,11 +112,19 @@ class News(TimestampMixin, TitleMixin, CleanEmptyHTMLMixin, models.Model):
     full_text = ckeditor_function(
         verbose_name='Основной текст',
         blank=True,
+        null=True,
         validators=[],
     )
     video_url = models.URLField(
         'Ссылка на видео',
         blank=True,
+    )
+    video_orientation = models.CharField(
+        max_length=VideoOrientationMixin.video_orientation_max_length(),
+        choices=VideoOrientationMixin.VideoOrientationChoices.choices,
+        default=VideoOrientationMixin.VideoOrientationChoices.HORIZONTAL,
+        blank=True,
+        verbose_name='Ориентация видео',
     )
     clean_html_fields = ('full_text', 'summary')
 
@@ -121,10 +144,6 @@ class News(TimestampMixin, TitleMixin, CleanEmptyHTMLMixin, models.Model):
         verbose_name = 'Новость'
         verbose_name_plural = 'Новости'
 
-    def __str__(self):
-        """Строковое представление направления."""
-        return f'{self.title} ({self.date})'
-
     def save(self, *args, **kwargs):
         """Сохранение объекта с предварительной валидацией."""
         self.clean()
@@ -140,6 +159,8 @@ class News(TimestampMixin, TitleMixin, CleanEmptyHTMLMixin, models.Model):
             )
         if self.detail_page_type == 'link' and not self.detail_page_link:
             raise ValidationError('Укажите ссылку на внешнюю страницу.')
+        if self.video_url and not self.video_orientation:
+            raise ValidationError('Укажите ориентацию видео.')
 
 
 class GalleryImage(TimestampMixin, OrderedModel):

@@ -38,3 +38,9 @@ LITERATURE_CONTENT_TYPES = [
     'docx',
 ]
 """Формат загрузки файлов для Литературы."""
+
+MIN_NEWS_REASONABLE_YEAR = 1900
+"""Минимальная дата для фильтрации News."""
+
+MAX_NEWS_YEAR_OFFSET = 2
+"""Смещение максимальной даты для фильтрации News."""

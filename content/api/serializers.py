@@ -29,12 +29,12 @@ from content.models import (
     Article,
     ArticleGallery,
     ArticleTextBlock,
+    ArticleVideoLink,
     ArticleUsefulLinks,
     Chapter,
     ChapterKnowledgeBase,
     ChapterUsefulLinks,
     Coaching,
-    CoachingPhoto,
     Direction,
     Document,
     Employee,
@@ -154,6 +154,7 @@ class TargetedFundraisingListSerializer(serializers.ModelSerializer):
             'main_photo',
             'created_at',
             'updated_at',
+            'order',
         )
 
     @extend_schema_field(FundraisingPhotoSerializer(allow_null=True))
@@ -204,6 +205,7 @@ class EmployeeSerializer(serializers.ModelSerializer):
             'image',
             'main_specialities',
             'order',
+            'category_on_main',
             'created_at',
             'updated_at',
         )
@@ -250,9 +252,17 @@ class EmployeeDetailSerializer(serializers.ModelSerializer):
             'interviews',
             'specialists_register',
             'image',
+            'category_on_main',
             'main_documents',
             'category_documents',
         )
+
+    def to_representation(self, instance):
+        """Не включает категории в ответ, если category_on_main=False."""
+        data = super().to_representation(instance)
+        if not getattr(instance, 'category_on_main', False):
+            data.pop('category_documents', None)
+        return data
 
     @extend_schema_field(list[dict])
     def get_main_documents(self, obj) -> list[dict]:
@@ -267,20 +277,21 @@ class EmployeeDetailSerializer(serializers.ModelSerializer):
     @extend_schema_field(list[dict])
     def get_category_documents(self, obj) -> list[dict]:
         """Возвращает документы, сгруппированные по категориям."""
+        if not getattr(obj, 'category_on_main', False):
+            return []
         docs = getattr(obj, 'prefetched_documents', None)
         if docs is None:
             docs = Document.objects.filter(employee=obj).select_related('type')
-        categories = {}
+        categories: dict = {}
         for doc in docs:
-            if doc.type is not None:
-                cat_id = doc.type.id
-                if cat_id not in categories:
-                    categories[cat_id] = {
-                        'id': doc.type.id,
-                        'name': doc.type.name,
-                        'documents': [],
-                    }
-                categories[cat_id]['documents'].append(doc)
+            if doc.type is None:
+                continue
+            cat_id = doc.type_id
+            bucket = categories.setdefault(
+                cat_id,
+                {'id': doc.type_id, 'name': doc.type.name, 'documents': []},
+            )
+            bucket['documents'].append(doc)
         return CategorySerializer(
             categories.values(), many=True, context=self.context
         ).data
@@ -412,6 +423,7 @@ class NewsDetailSerializer(serializers.ModelSerializer):
             'show_on_main',
             'full_text',
             'video_url',
+            'video_orientation',
             'directions',
             'project',
             'gallery_images',
@@ -454,7 +466,6 @@ class VacancySerializer(serializers.ModelSerializer):
             'salary',
             'short_description',
             'schedule',
-            'location',
             'redirect_type',
             'order',
         )
@@ -477,20 +488,8 @@ class VacancyDetailSerializer(serializers.ModelSerializer):
         )
 
 
-class CoachingPhotoSerializer(serializers.ModelSerializer):
-    """Сериализатор CoachingPhoto."""
-
-    class Meta:
-        """Meta класс с настройками сериализатора CoachingPhotoSerializer."""
-
-        model = CoachingPhoto
-        fields = ('image',)
-
-
 class CoachingSerializer(serializers.ModelSerializer):
     """Сериализатор Coaching."""
-
-    photos = CoachingPhotoSerializer(many=True)
 
     class Meta:
         """Meta класс с настройками сериализатора CoachingSerializer."""
@@ -500,11 +499,11 @@ class CoachingSerializer(serializers.ModelSerializer):
             'id',
             'order',
             'title',
-            'photos',
+            'photo',
+            'add_info',
             'short_text',
             'service_price',
             'date',
-            'place',
             'course_format',
             'button',
             'link_button',
@@ -548,6 +547,20 @@ class ArticleTextBlockSerializer(serializers.ModelSerializer):
         )
 
 
+class ArticleVideoLinkSerializer(serializers.ModelSerializer):
+    """Сериализатор ArticleVideoLink."""
+
+    class Meta:
+        """Meta класс с настройками сериализатор ArticleVideoLinkSerializer."""
+
+        model = ArticleVideoLink
+        fields = (
+            'id',
+            'video_link',
+            'video_orientation',
+        )
+
+
 class ArticleMiniSerializer(serializers.ModelSerializer):
     """Сериализатор ArticleMini."""
 
@@ -563,12 +576,26 @@ class ArticleMiniSerializer(serializers.ModelSerializer):
         )
 
 
+class ChapterKnowledgeBaseMiniSerializer(serializers.ModelSerializer):
+    """Сериализатор ChapterKnowledgeBaseMiniSerializer."""
+
+    class Meta:
+        """Meta класс с настройками сериализатора."""
+
+        model = ChapterKnowledgeBase
+        fields = (
+            'id',
+            'title',
+        )
+
+
 class ArticleSerializer(serializers.ModelSerializer):
     """Сериализатор Article."""
 
-    chapter = serializers.CharField(source='chapter.title')
+    chapter = ChapterKnowledgeBaseMiniSerializer()
     gallery_photos = ArticleGallerySerializer(many=True)
     text_blocks = ArticleTextBlockSerializer(many=True)
+    video_links = ArticleVideoLinkSerializer(many=True)
 
     class Meta:
         """Meta класс с настройками сериализатор ArticleSerializer."""
@@ -580,7 +607,7 @@ class ArticleSerializer(serializers.ModelSerializer):
             'chapter',
             'detailed_page',
             'link',
-            'video_link',
+            'video_links',
             'text_blocks',
             'gallery_photos',
         )
@@ -643,6 +670,7 @@ class LiteratureSerializer(serializers.ModelSerializer):
             'button_type',
             'file',
             'literature_url',
+            'order',
         )
 
 
@@ -651,7 +679,7 @@ class TrainAndInternPhotoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TrainingAndInternshipsPhoto
-        fields = ('id', 'image', 'on_main', 'order')
+        fields = ('id', 'image', 'order')
 
 
 class TrainAndInternSerializer(serializers.ModelSerializer):

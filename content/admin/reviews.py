@@ -6,13 +6,15 @@
 
 from django.contrib import admin
 
-from content.base_models import BaseOrderedModelAdmin
+from content.base_models import TopOrderedModelAdmin
 from content.mixins import CharCountAdminMixin
 from content.models import Review
 
+from .site import admin_site
 
-@admin.register(Review)
-class ReviewAdmin(CharCountAdminMixin, BaseOrderedModelAdmin):
+
+@admin.register(Review, site=admin_site)
+class ReviewAdmin(CharCountAdminMixin, TopOrderedModelAdmin):
     """Настройка отображения списка Review и форм редактирования.
 
     Определяет отображаемые и редактируемые поля, фильтры, поиск и секции.
@@ -22,7 +24,7 @@ class ReviewAdmin(CharCountAdminMixin, BaseOrderedModelAdmin):
         'author_name': 45,
         'content': 200,
     }
-    list_display = ('author_name', 'is_active', 'move_up_down_links')
+    list_display = ('__str__', 'is_active', 'move_up_down_links')
     list_editable = ('is_active',)
     list_filter = ('is_active', 'created_at')
     search_fields = ('content', 'author_name')

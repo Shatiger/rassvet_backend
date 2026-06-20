@@ -9,8 +9,10 @@ from django.shortcuts import redirect
 
 from content.models.mission import Mission
 
+from .site import admin_site
 
-@admin.register(Mission)
+
+@admin.register(Mission, site=admin_site)
 class MissionAdmin(admin.ModelAdmin):
     """Админ зона Миссий."""
 

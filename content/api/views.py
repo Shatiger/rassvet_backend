@@ -13,7 +13,7 @@
 Используются только для чтения (GET-запросов).
 """
 
-from django.db.models import Prefetch
+from django.db.models import Max, Min, Prefetch
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import mixins, status, viewsets
@@ -298,6 +298,30 @@ class NewsViewSet(MultiSerializerViewSetMixin, viewsets.ReadOnlyModelViewSet):
         'retrieve': serializers.NewsDetailSerializer,
     }
 
+    def list(self, request, *args, **kwargs):
+        """Возвращает список новостей с минимальным и максимальным годом."""
+        filtered_queryset = self.filter_queryset(
+            self.get_queryset()
+        ).distinct()
+
+        page = self.paginate_queryset(filtered_queryset)
+        serializer = self.get_serializer(page, many=True)
+
+        date_bounds = self.get_queryset().aggregate(
+            min_date=Min('date'), max_date=Max('date')
+        )
+        min_year = (
+            date_bounds['min_date'].year if date_bounds['min_date'] else None
+        )
+        max_year = (
+            date_bounds['max_date'].year if date_bounds['max_date'] else None
+        )
+
+        response = self.get_paginated_response(serializer.data)
+        response.data['min_year'] = min_year
+        response.data['max_year'] = max_year
+        return response
+
 
 @extend_schema(tags=['Directions group'])
 @extend_schema_view(
@@ -354,9 +378,7 @@ class ReportViewSet(viewsets.ReadOnlyModelViewSet):
 class CoachingViewSet(viewsets.ReadOnlyModelViewSet):
     """Получить список "Консультация и обучение", или конкретный по его ID."""
 
-    queryset = Coaching.objects.prefetch_related(
-        'photos',
-    ).all()
+    queryset = Coaching.objects.all()
     serializer_class = serializers.CoachingSerializer
 
 
@@ -450,6 +472,7 @@ class ArticleViewSet(viewsets.ReadOnlyModelViewSet):
         Article.objects.select_related('chapter')
         .prefetch_related(
             'gallery_photos',
+            'video_links',
             'text_blocks',
         )
         .all()

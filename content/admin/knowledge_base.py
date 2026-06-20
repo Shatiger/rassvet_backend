@@ -13,15 +13,18 @@ from content.models import (
     Article,
     ArticleGallery,
     ArticleTextBlock,
+    ArticleVideoLink,
     ChapterKnowledgeBase,
 )
 
+from .site import admin_site
 
-@admin.register(ChapterKnowledgeBase)
+
+@admin.register(ChapterKnowledgeBase, site=admin_site)
 class ChapterKnowledgeBaseAdmin(admin.ModelAdmin):
     """Админ зона разделов Базы знаний."""
 
-    list_display = ('title',)
+    list_display = ('__str__',)
     search_fields = ('title',)
 
 
@@ -29,8 +32,9 @@ class ArticleGallerykAdmin(admin.StackedInline):
     """Inline-класс для Галерея фото статьи Базы знаний."""
 
     model = ArticleGallery
+    extra = 1
     min_num = 0
-    max_num = 15
+    max_num = 255
 
     def get_queryset(self, request):
         """Оптимизация запросов к базе данных."""
@@ -43,20 +47,34 @@ class ArticleTextBlockAdmin(admin.StackedInline):
 
     model = ArticleTextBlock
     extra = 1
-    max_num = 3
+    min_num = 0
+    max_num = 255
 
 
-@admin.register(Article)
+class ArticleVideoLinkAdmin(admin.StackedInline):
+    """Inline-класс для Ссылка на видео статьи Базы знаний."""
+
+    model = ArticleVideoLink
+    extra = 1
+    min_num = 0
+    max_num = 255
+
+
+@admin.register(Article, site=admin_site)
 class ArticleAdmin(admin.ModelAdmin):
     """Админ зона статьи Базы знаний."""
 
     list_display = (
-        'title',
+        '__str__',
         'chapter',
     )
     list_filter = ('chapter',)
     search_fields = ('title',)
-    inlines = (ArticleGallerykAdmin, ArticleTextBlockAdmin)
+    inlines = (
+        ArticleTextBlockAdmin,
+        ArticleVideoLinkAdmin,
+        ArticleGallerykAdmin,
+    )
 
     def get_queryset(self, request):
         """Оптимизация запросов к базе данных."""

@@ -7,16 +7,21 @@
 """
 
 from django.contrib import admin
-from ordered_model.admin import OrderedModelAdmin
 
+from content.base_models import SafeOrderedModelAdmin
 from content.mixins import CharCountAdminMixin
 from content.models import Document, Employee, TypeDocument
 
+from .site import admin_site
 
-@admin.register(TypeDocument)
-class TypeDocumentInline(admin.ModelAdmin):
+
+@admin.register(TypeDocument, site=admin_site)
+class TypeDocumentInline(CharCountAdminMixin, admin.ModelAdmin):
     """Настройка отображения модели TypeDocument в админке."""
 
+    charcount_fields = {
+        'name': 35,
+    }
     fields = ('name',)
     search_fields = ('name',)
 
@@ -41,8 +46,8 @@ class DocumentInline(admin.TabularInline):
         return qs.select_related('type')
 
 
-@admin.register(Employee)
-class EmployeeAdmin(CharCountAdminMixin, OrderedModelAdmin):
+@admin.register(Employee, site=admin_site)
+class EmployeeAdmin(CharCountAdminMixin, SafeOrderedModelAdmin):
     """Конфигурация админки для модели Employee.
 
     Определяет отображаемые поля, фильтрацию, поиск, inline-классы и fieldsets.
@@ -52,7 +57,7 @@ class EmployeeAdmin(CharCountAdminMixin, OrderedModelAdmin):
         'name': 19,
         'main_specialities': 45,
     }
-    list_display = ('name', 'category_on_main', 'move_up_down_links')
+    list_display = ('__str__', 'category_on_main', 'move_up_down_links')
     list_editable = ('category_on_main',)
     list_filter = ('created_at', 'updated_at')
     search_fields = ('name',)
@@ -66,13 +71,13 @@ class EmployeeAdmin(CharCountAdminMixin, OrderedModelAdmin):
                     'name',
                     'image',
                     'main_specialities',
+                    'specialities',
+                    'education',
+                    'additional_education',
                     'trainings',
                     'interviews',
                     'specialists_register',
                     'category_on_main',
-                    'specialities',
-                    'education',
-                    'additional_education',
                 )
             },
         ),

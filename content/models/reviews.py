@@ -31,5 +31,7 @@ class Review(TimestampMixin, OrderedModel):
         indexes = [models.Index(fields=['order'])]
 
     def __str__(self):
-        """Возвращает строковое представление отзыва."""
+        """Строковое представление."""
+        if len(self.author_name) > 50:
+            return f'{self.author_name[:50]}...'
         return self.author_name

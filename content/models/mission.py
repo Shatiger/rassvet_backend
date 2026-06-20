@@ -5,6 +5,7 @@
 """
 
 from django.db import models
+from django.utils.html import strip_tags
 
 from content.utils import ckeditor_function
 
@@ -25,7 +26,10 @@ class Mission(models.Model):
 
     def __str__(self):
         """Возвращает строковое представление Миссии организации."""
-        return self.organization_mission
+        title = strip_tags(self.organization_mission)
+        if len(title) > 100:
+            return f'{title[:100]}...'
+        return title
 
     @classmethod
     def get_solo(cls):

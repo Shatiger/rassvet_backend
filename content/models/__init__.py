@@ -15,13 +15,14 @@
 """
 
 from .about_us_video import AboutUsVideo
-from .coaching import Coaching, CoachingPhoto
+from .coaching import Coaching
 from .employees import Document, Employee, TypeDocument
 from .gratitudes import Gratitude
 from .knowledge_base import (
     Article,
     ArticleGallery,
     ArticleTextBlock,
+    ArticleVideoLink,
     ChapterKnowledgeBase,
 )
 from .literatures import Literature
@@ -50,11 +51,11 @@ __all__ = [
     'Article',
     'ArticleGallery',
     'ArticleTextBlock',
+    'ArticleVideoLink',
     'ArticleUsefulLinks',
     'ChapterKnowledgeBase',
     'ChapterUsefulLinks',
     'Coaching',
-    'CoachingPhoto',
     'Chapter',
     'Direction',
     'Document',
