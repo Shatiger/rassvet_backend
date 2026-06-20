@@ -48,7 +48,6 @@ services:
         NEXT_PUBLIC_API_VERSION: ${NEXT_PUBLIC_API_VERSION:-v1}
     env_file: .env
     environment:
-      INTERNAL_API_URL: http://backend:8000
       NODE_ENV: production
     expose:
       - "3000"
