@@ -7,7 +7,7 @@
 """
 
 from django.core.exceptions import ValidationError
-from django.core.validators import FileExtensionValidator
+from django.core.validators import FileExtensionValidator, RegexValidator
 from django.db import models
 from django.utils import timezone
 from ordered_model.models import OrderedModel
@@ -102,10 +102,18 @@ class News(
         choices=DetailPageChoices.choices,
         default=DetailPageChoices.NONE,
     )
-    detail_page_link = models.URLField(
-        'Ссылка на подробную страницу',
+    detail_page_link = models.CharField(
+        verbose_name='Ссылка на подробную страницу',
         blank=True,
+        max_length=500,
+        validators=[
+            RegexValidator(
+                regex=r'^(https?://|/).*$',
+                message='Введите корректный URL или относительный путь (начинается с /)',
+            )
+        ]
     )
+    
     show_on_main = models.BooleanField(
         'Отображение на странице Новости', default=True
     )

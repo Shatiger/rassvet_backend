@@ -6,6 +6,7 @@
 """
 
 from django.db import models
+from django.core.validators import RegexValidator
 
 from content.constants import EMPTY_VALUE_DISPLAY
 from content.mixins import TimestampMixin, VideoOrientationMixin
@@ -20,7 +21,17 @@ class AboutUsVideo(VideoOrientationMixin, TimestampMixin, models.Model):
         default=VideoOrientationMixin.VideoOrientationChoices.HORIZONTAL,
         verbose_name='Ориентация видео',
     )
-    url = models.URLField('Ссылка на видео')
+    url = models.CharField(
+        verbose_name = 'Ссылка на видео',
+        blank=True,
+        max_length=500,
+        validators=[
+            RegexValidator(
+                regex=r'^(https?://|/).*$',
+                message='Введите корректный URL или относительный путь (начинается с /)',
+            )
+        ]
+    )
 
     class Meta:
         """Класс Meta, который содержит мета-данные для модели."""

@@ -7,7 +7,7 @@
 """
 
 from django.core.exceptions import ValidationError
-from django.core.validators import FileExtensionValidator
+from django.core.validators import FileExtensionValidator, RegexValidator
 from django.db import models
 from ordered_model.models import OrderedModel
 
@@ -64,10 +64,17 @@ class Coaching(TitleMixin, OrderedModel):
         default=Buttons.ABA_THERAPY,
         verbose_name='Тип перехода',
     )
-    link_button = models.URLField(
-        verbose_name='Ссылка на страницу новости',
-        help_text='Ссылка вводится только для новости',
+    link_button = models.CharField(
+        verbose_name='Ссылка на новость',
         blank=True,
+        max_length=500,
+        help_text='Ссылка вводится только для новости',
+        validators=[
+            RegexValidator(
+                regex=r'^(https?://|/).*$',
+                message='Введите корректный URL или относительный путь (начинается с /)',
+            )
+        ]
     )
 
     class Meta(OrderedModel.Meta):
