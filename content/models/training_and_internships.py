@@ -7,7 +7,7 @@
     - TrainingAndInternshipsPhoto: Хранит фотографии обучения и стажировок
 """
 
-from django.core.validators import FileExtensionValidator
+from django.core.validators import FileExtensionValidator, RegexValidator
 from django.db import models
 from django.forms import ValidationError
 from ordered_model.models import OrderedModel
@@ -73,11 +73,17 @@ class TrainingAndInternships(TitleMixin, CleanEmptyHTMLMixin, OrderedModel):
         default=ActionOnButton.DETAIL,
         verbose_name='Тип перехода',
     )
-    linked_news = models.URLField(
+    linked_news = models.CharField(
         verbose_name='Ссылка на новость',
         blank=True,
         max_length=500,
         help_text='Ссылка вводится только для новости',
+        validators=[
+            RegexValidator(
+                regex=r'^(https?://|/).*$',
+                message='Введите корректный URL или относительный путь (начинается с /)',
+            )
+        ]
     )
     clean_html_fields = ('text_block',)
 
