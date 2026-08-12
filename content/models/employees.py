@@ -9,7 +9,7 @@
 import html
 import os
 
-from django.core.validators import FileExtensionValidator
+from django.core.validators import FileExtensionValidator, RegexValidator
 from django.db import models
 from django.utils.html import strip_tags
 from django_ckeditor_5.fields import CKEditor5Field
@@ -40,7 +40,17 @@ class Employee(TimestampMixin, OrderedModel):
     main_specialities = models.TextField(
         verbose_name='Специальности на общей странице',
     )
-    interviews = models.URLField(verbose_name='Интервью', blank=True)
+    interviews = models.CharField(
+        verbose_name='Интервью',
+        blank=True,
+        max_length=500,
+        validators=[
+            RegexValidator(
+                regex=r'^(https?://|/).*$',
+                message='Введите корректный URL или относительный путь (начинается с /)',
+            )
+        ]
+    )
     specialists_register = models.URLField(
         verbose_name='Реестр специалистов', blank=True
     )
