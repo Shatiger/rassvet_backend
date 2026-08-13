@@ -10,6 +10,7 @@
 - Проекты
 - Новости
 - Литература
+- Поисковый индекс
 
 Все модели регистрируются здесь для обеспечения корректного импорта и миграций.
 """
@@ -31,6 +32,7 @@ from .news import Direction, GalleryImage, News
 from .partners import Partner
 from .projects import ProgramsProjects, Project, ProjectPhoto, ProjectsStatus
 from .reviews import Review
+from .search import SearchEntityType, SearchEntry
 from .supervisors import Supervisor
 from .targeted_fundraisings import (
     FundraisingPhoto,
@@ -73,6 +75,8 @@ __all__ = [
     'ProjectsStatus',
     'Report',
     'Review',
+    'SearchEntityType',
+    'SearchEntry',
     'Supervisor',
     'TargetedFundraising',
     'TypeDocument',

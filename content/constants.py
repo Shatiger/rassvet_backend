@@ -44,3 +44,12 @@ MIN_NEWS_REASONABLE_YEAR = 1900
 
 MAX_NEWS_YEAR_OFFSET = 2
 """Смещение максимальной даты для фильтрации News."""
+
+SEARCH_ENTITY_TYPE_LENGTH = 32
+"""Максимальная длина кода типа сущности в поисковом индексе."""
+
+SEARCH_EXTERNAL_URL_LENGTH = 500
+"""Максимальная длина внешней ссылки в поисковом индексе."""
+
+SEARCH_CONFIG = 'russian'
+"""Конфигурация полнотекстового поиска PostgreSQL."""
