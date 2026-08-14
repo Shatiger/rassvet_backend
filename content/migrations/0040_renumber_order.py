@@ -10,11 +10,29 @@ order и внутри группы одинаковых значений сос�
 Миграция раздаёт order значения 0..n-1 по возрастанию id. Нумерация
 с нуля — её же ожидает OrderedModel: get_next_order() для пустой группы
 возвращает 0, дальше max+1.
+
+Модель, у которой дублей нет, не трогается вовсе. Это защита от повторного
+применения: если миграцию откатят (обратная операция noop, отметка о
+применении снимается) и накатят заново, расставленный руками порядок
+не сбросится.
 """
 
 from django.db import migrations
+from django.db.models import Count
 
 BATCH_SIZE = 500
+
+
+def _has_duplicates(model, db_alias, group_field=None):
+    """Проверяет, есть ли записи с одинаковым order."""
+    group_by = [group_field, 'order'] if group_field else ['order']
+    return (
+        model.objects.using(db_alias)
+        .values(*group_by)
+        .annotate(total=Count('id'))
+        .filter(total__gt=1)
+        .exists()
+    )
 
 
 def _renumber(model, db_alias, order_by, group_field=None):
@@ -22,7 +40,11 @@ def _renumber(model, db_alias, order_by, group_field=None):
 
     Если задан group_field, нумерация идёт независимо внутри каждой
     группы (для Report это раздел, см. order_with_respect_to).
+    Модель без дублей order остаётся без изменений.
     """
+    if not _has_duplicates(model, db_alias, group_field):
+        return 0
+
     fields = ['id', 'order']
     if group_field:
         fields.append(group_field)
