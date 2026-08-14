@@ -18,7 +18,7 @@ IMAGE_CONTENT_TYPES = [
 ]
 """Формат загрузки файлов для ImageField."""
 
-FILE_CONTENT_TYPES = ['pdf']
+FILE_CONTENT_TYPES = ['pdf', 'jpg', 'jpeg', 'png']
 """Формат загрузки файлов для FileField."""
 
 EMPTY_VALUE_DISPLAY = '-пусто-'
